@@ -16,8 +16,7 @@ class ApiServices extends GetConnect {
   Uri? open_service;
   Utils utils = Utils();
 
-  // static String END_POINT_URL_LOCAL = "http://164.100.167.197:8080/tnrd/project/webservices_forms";
-  static String END_POINT_URL_LOCAL = "http://10.163.19.137:8090/tnrd/project/webservices_forms";
+
   static String END_POINT_URL_LIVE = "https://tnrd.tn.gov.in/project/webservices_forms";
 
   ApiServices() {
@@ -25,7 +24,7 @@ class ApiServices extends GetConnect {
   }
 
   Future<void> initialize() async {
-    String mainUrl = (prefs.isLocal ? END_POINT_URL_LOCAL : END_POINT_URL_LIVE);
+    String mainUrl = ( END_POINT_URL_LIVE);
     login_service = Uri.parse("$mainUrl/login_service/login_services_v_1_2.php");
     master_service = Uri.parse("$mainUrl/master_services/master_services_v_1_7.php");
     open_service = Uri.parse("$mainUrl/open_services/open_services_mgnrega.php");

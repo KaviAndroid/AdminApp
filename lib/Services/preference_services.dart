@@ -8,7 +8,6 @@ class PreferenceService {
   String userName = "";
   String userPassKey = "";
 
-  bool isLocal = true;
   RxBool showCommonProgress = false.obs;
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
