@@ -32,7 +32,7 @@ class ApiServices extends GetConnect {
 
   Future loginServiceFunction(String type, dynamic request) async {
     log("$type- url>>$login_service");
-    log("$type- request>>$request");
+    log("$type- r   equest>>$request");
 
     IOClient ioClient = IOClient();
     //   utils.showProgress();
