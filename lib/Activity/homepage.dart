@@ -29,7 +29,6 @@ class _HomepageState extends State<Homepage> {
   String profile = "";
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initialize();
   }
