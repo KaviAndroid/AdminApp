@@ -33,7 +33,7 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Container(
-        decoration: UIHelper.roundedBorderWithBackround(0, ImagePath.splashbg),
+        decoration: UIHelper.roundedBorderWithBackround(0, ImagePath.bg),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,13 +41,13 @@ class _SplashState extends State<Splash> {
               AnimatedContainer(
                 duration: Duration(milliseconds: 800),
                 padding: EdgeInsets.all(10),
-                decoration: UIHelper.circledecorationWithColor(AppColors.white, Colors.brown),
+                decoration: UIHelper.circledecorationWithColor(AppColors.white, Color.fromARGB(255, 27, 101, 237)),
                 height: isAnimation ? Get.width / 1.5 : 0,
                 width: isAnimation ? Get.width / 1.5 : 0,
                 margin: EdgeInsets.all(3),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(ImagePath.gandhi, fit: BoxFit.cover),
+                  child: Image.asset(ImagePath.admin, fit: BoxFit.cover),
                 ),
               ),
               UIHelper.verticalSpaceSmall,

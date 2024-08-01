@@ -2,18 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../Controllers/home_controller.dart';
-import '../Layouts/custom_dropdown.dart';
-import '../Layouts/ui_helper.dart';
-import '../Resources/colors.dart';
-import '../Resources/strings.dart';
 import 'package:responsive_fonts/responsive_fonts.dart';
 
-import '../../Layouts/appbar.dart';
 import '../../Layouts/custom_alert.dart';
 import '../../Services/routes_services.dart';
 import '../../Services/utils.dart';
+import '../Controllers/home_controller.dart';
+import '../Layouts/ui_helper.dart';
+import '../Resources/colors.dart';
 import '../Resources/image_path.dart';
+import '../Resources/strings.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -184,7 +182,7 @@ class _HomepageState extends State<Homepage> {
                         width: Get.width,
                         height: Get.height / 2,
                         child: profile != "" && profile != "null"&& profile != null ? Image.memory(base64Decode(profile),)
-                            : Image.asset(ImagePath.logo),
+                            : Image.asset(ImagePath.gallery),
                       ),
                     ),
                     context: context),
@@ -210,7 +208,7 @@ class _HomepageState extends State<Homepage> {
                   image: DecorationImage(
                     fit: BoxFit.fill,
                     image: profile != "" && profile != "null"&& profile != null ? MemoryImage(base64Decode(profile),)
-                        : AssetImage(ImagePath.logo),
+                        : AssetImage(ImagePath.gallery),
                   ),
                 ),
               ),

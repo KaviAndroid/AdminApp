@@ -35,7 +35,7 @@ class SigninView extends StatelessWidget {
                       width: Get.width * 0.45,
                       padding: EdgeInsets.all(30),
                       decoration: UIHelper.circledecorationWithColor(AppColors.white, AppColors.secondaryLiteColor),
-                      child: Image.asset(ImagePath.login, fit: BoxFit.cover),
+                      child: Image.asset(ImagePath.phone_vibration, fit: BoxFit.cover),
                     ),
                     UIHelper.verticalSpaceMedium,
                     ResponsiveFonts(text: "signin".tr, size: 18, fontWeight: FontWeight.w500, color: AppColors.white)

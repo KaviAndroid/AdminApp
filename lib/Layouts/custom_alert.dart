@@ -35,7 +35,7 @@ class _CustomDialogState extends State<CustomDialog> {
     } else if (widget.alertType == AlertType.fail) {
       title = "Failiure";
       aprimaryclr = AppColors.red;
-      icon = ImagePath.fail;
+      icon = ImagePath.success;
     }
   }
 
