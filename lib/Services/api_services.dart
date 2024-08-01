@@ -8,7 +8,6 @@ import '../Services/preference_services.dart';
 import '../Services/utils.dart';
 
 class ApiServices extends GetConnect {
-  // Utils utils = Utils();
   final PreferenceService prefs = Get.find<PreferenceService>();
   Uri? login_service;
   Uri? master_service;
