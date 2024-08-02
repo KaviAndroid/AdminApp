@@ -49,37 +49,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
     lang = preferencesService.selectedLanguage;
 
     switch (widget.type) {
-      case DropDownType.level:
-        key = AppStrings.key_localbody_code;
-        value = AppStrings.key_localbody_name;
-        break;
-      case DropDownType.designation:
-        key = AppStrings.key_desig_code;
-        value = AppStrings.key_desig_name;
-        break;
-      case DropDownType.district:
-        key = AppStrings.key_dcode;
-        value = lang == "ta" ? AppStrings.key_dname_ta : AppStrings.key_dname;
-        break;
-      case DropDownType.block:
-        key = AppStrings.key_bcode;
-        value = lang == "ta" ? AppStrings.key_bname_ta : AppStrings.key_bname;
-        break;
-      case DropDownType.gender:
-        key = AppStrings.key_gender_code;
-        value = lang == "ta" ? AppStrings.key_gender_name_ta : AppStrings.key_gender_name_en;
-        break;
-      case DropDownType.village:
-        key = AppStrings.key_pvcode;
-        value = lang == "ta" ? AppStrings.key_pvname_ta : AppStrings.key_pvname;
-        break;
       case DropDownType.category:
-        key = AppStrings.key_category_id;
-        value = AppStrings.key_category_name;
+        key = "AppStrings.key_category_id";
+        value = "AppStrings.key_category_name";
         break;
       default:
-        key = AppStrings.key_gender_code;
-        value = lang == "ta" ? AppStrings.key_gender_name_ta : AppStrings.key_gender_name_en;
+        key = "AppStrings.key_gender_code";
+        value = lang == "ta" ? "AppStrings.key_gender_name_ta" : "AppStrings.key_gender_name_en";
     }
   }
 

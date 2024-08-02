@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import '../Controllers/authendication_controller.dart';
 import '../Layouts/custom_input.dart';
@@ -17,132 +18,66 @@ class SigninView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthendicationController>(builder: (controller) {
-      return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: AppColors.secondaryColor,
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: Get.height * 0.35,
-                color: AppColors.secondaryColor,
-                child: Center(
-                    child: Column(
+      return Stack(
+        children: [
+          UIHelper.bgDesign(),
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.transparent,
+            body: Container(
+              padding: EdgeInsets.all(30),
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: Get.width * 0.45,
-                      padding: EdgeInsets.all(30),
-                      decoration: UIHelper.circledecorationWithColor(AppColors.white, AppColors.secondaryLiteColor),
-                      child: Image.asset(ImagePath.phone_vibration, fit: BoxFit.cover),
-                    ),
+                    SizedBox(height: Get.width* 0.60,),
+                    ResponsiveFonts(text: "Sign In", size: 18, fontWeight: FontWeight.w500, color: AppColors.primaryColorDark),
                     UIHelper.verticalSpaceMedium,
-                    ResponsiveFonts(text: "signin".tr, size: 18, fontWeight: FontWeight.w500, color: AppColors.white)
+                    CustomInput(
+                      onEnter: (val) {
+                        controller.mobile.text=val.toString();
+                        print(val);
+                      },
+                      hintText: "Mobile No",
+                      fieldname: "mobile",
+                      fieldType: FieldType.number,
+                      validating: (value) {
+                        return null;
+                      },
+                    ),
+                    UIHelper.verticalSpaceLarge,
+                    UIHelper().actionButton(AppColors.primaryColor, "Get OTP".tr, radius: 25, onPressed: () {
+                      if (controller.utils.isNumberValid(controller.mobile.text)) {
+                        showModalBottomSheet(
+                          context: context,
+                          isDismissible: true,
+                          elevation: 3,
+                          showDragHandle: true,
+                          enableDrag: true,
+                          isScrollControlled: true,
+                          builder: (builder) => Padding(
+                            padding: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).viewInsets.bottom),
+                            child: bottomSheet(context, controller),
+                          ),
+                        ).whenComplete(
+                              () {
+                            controller.forgotMobileNo.value = '';
+                            controller.initialChildSize.value = 0.4;
+                          },
+                        );
+                      } else {
+                        controller.utils.showSnackBar("Pleas Enter Valid Mobile Number");
+                      }
+                      // controller.login(context);
+                    }, reducewidth: 1.35),
+                    UIHelper.verticalSpaceMedium,
                   ],
-                )),
+                ),
               ),
-              Container(
-                  height: Get.height * 0.65,
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryLiteColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                    ),
-                  ),
-                  margin: EdgeInsets.only(left: 30),
-                  child: FormBuilder(
-                    child: Container(
-                      padding: EdgeInsets.all(25),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Spacer(),
-                          CustomInput(
-                            onEnter: (val) {
-                              controller.username.text=val.toString();
-                              print(val);
-                              print("controller.username.text"+controller.username.text);
-                            },
-                            hintText: "mobile".tr,
-                            fieldname: "mobile",
-                            fieldType: FieldType.number,
-                            validating: (value) {
-                              return null;
-                            },
-                          ),
-                          UIHelper.verticalSpaceMedium,
-                          Obx(
-                            () => CustomInput(
-                              hintText: "password".tr,
-                              fieldname: "password",
-                              fieldType: FieldType.password,
-                              showpassword: controller.isShowPassword.value,
-                              suffixWidget: GestureDetector(
-                                  onTap: () {
-                                    if (controller.isShowPassword.value) {
-                                      controller.isShowPassword.value = false;
-                                    } else {
-                                      controller.isShowPassword.value = true;
-                                    }
-                                  },
-                                  child: Icon(controller.isShowPassword.value ? Icons.visibility : Icons.visibility_off, color: AppColors.grey2)),
-                              onEnter: (val) {
-                                print(val);
-                                controller.password.text=val.toString();
-                              },
-                              validating: (value) {
-                                return null;
-                              },
-                            ),
-                          ),
-                          UIHelper.verticalSpaceSmall,
-                          Align(
-                              alignment: Alignment.centerRight,
-                              child: InkWell(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isDismissible: true,
-                                      elevation: 3,
-                                      showDragHandle: true,
-                                      enableDrag: true,
-                                      isScrollControlled: true,
-                                      builder: (builder) => bottomSheet(context, controller),
-                                    ).whenComplete(
-                                      () {
-                                        controller.forgotMobileNo.value = '';
-                                        controller.initialChildSize.value = 0.4;
-                                      },
-                                    );
-                                  },
-                                  child: ResponsiveFonts(text: "forgot_password".tr, size: 13, fontWeight: FontWeight.w500))),
-                          UIHelper.verticalSpaceLarge,
-                          UIHelper().actionButton(AppColors.primaryColor, "signin".tr, radius: 25, onPressed: () {
-                            controller.login(context);
-                          }, reducewidth: 1.35),
-                          UIHelper.verticalSpaceMedium,
-                          InkWell(
-                            onTap: () {
-                              controller.fetchDropDownLists();
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ResponsiveFonts(text: "signupText".tr, size: 13, fontWeight: FontWeight.w500),
-                                UIHelper.horizontalSpaceSmall,
-                                ResponsiveFonts(text: "Sign Up".tr, size: 15, fontWeight: FontWeight.w500, color: AppColors.primaryColor),
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                  )),
-            ],
+            ),
           ),
-        ),
+        ],
       );
     });
   }
@@ -158,48 +93,68 @@ class SigninView extends StatelessWidget {
             margin: const EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-                ResponsiveFonts(
-                  text: "forgot_your_password".tr,
-                  size: 16,
-                  fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(ImagePath.phone_vibration,height: 25,width: 25,),
+                    UIHelper.horizontalSpaceTiny,
+                    ResponsiveFonts(
+                      text: "Otp sent to your  mobile number",
+                      size: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ],
                 ),
                 UIHelper.verticalSpaceMedium,
                 ResponsiveFonts(
-                  text: "enter_no_to_get_pass".tr,
+                  text: "Enter OTP",
                   size: 13,
                 ),
                 UIHelper.verticalSpaceMedium,
-                CustomInput(
-                  onEnter: (val) {
-                    controller.forgotMobileNo.value = val;
-                  },
-                  onTap: () {
-                    controller.initialChildSize.value = 0.5;
-                  },
-                  hintText: "mobile".tr,
-                  fieldname: "mobile",
-                  fieldType: FieldType.number,
-                  validating: (value) {
-                    return null;
-                  },
-                  onSubmitted: (val) {
-                    controller.initialChildSize.value = 0.4;
-                    controller.forgotMobileNo.value = val;
-                    print('controller.forgotMobileNo.value: ${controller.forgotMobileNo.value}');
-                  },
-                ),
-                UIHelper.verticalSpaceLarge,
-                UIHelper().actionButton(AppColors.green, "submit".tr, radius: 15, onPressed: () {
-                  controller.otpController.clearAll();
+              OtpTextField(
+                numberOfFields: 6,
+                borderColor: AppColors.primaryColor,
+                focusedBorderColor: AppColors.secondaryColor,
+                //set to true to show as box or false to show as dash
+                showFieldAsBox: true,
+                //runs when a code is typed in
+                onCodeChanged: (String code) {
+                  controller.finalOTP=code;
+                  //handle validation or checks here
+                },
+                //runs when every textfield is filled
+                onSubmit: (String verificationCode){
+                  controller.finalOTP=verificationCode;
+                  showDialog(
+                      context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          title: Text("Verification Code"),
+                          content: Text('Code entered is $verificationCode'),
+                        );
+                      }
+                  );
+                }, // end onSubmit
+              ),
+                UIHelper.verticalSpaceMedium,
+                Container(
+                  margin: EdgeInsets.only(left: 30),
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                        onTap: () {
 
-                  if (controller.utils.isNumberValid(controller.forgotMobileNo.value)) {
+                        },
+                        child: ResponsiveFonts(text: "Rend Otp", size: 13, fontWeight: FontWeight.w500,color: AppColors.primaryColor,))),
+                UIHelper.verticalSpaceMedium,
+                UIHelper().actionButton(AppColors.secondaryColor, "Submit", radius: 15, onPressed: () {
+                  if (controller.finalOTP.isNotEmpty && controller.finalOTP.length==6) {
                     Get.back();
 
-                    controller.forgotPassword();
                   } else {
-                    controller.utils.showSnackBar("${"please".tr} ${"enter_mobile".tr}");
+                    controller.utils.showSnackBar("Pleas Enter Valid OTP");
                   }
-                }, reducewidth: 1),
+                }, reducewidth: 3),
               ],
             ),
           ),

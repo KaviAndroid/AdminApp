@@ -1,5 +1,5 @@
 class AppStrings {
-  static const String appname = "NREGA";
+  static const String appname = "Admin";
 
   static const String key_enc_data = "enc_data";
   static const String key_service_id = 'service_id';
@@ -22,7 +22,10 @@ class AppStrings {
   static const String key_mobile_otp = "mobile_otp";
   static const String key_cluster_sub_id = "primary_id";
   static const String key_profile_image = "profile_image";
+
+
   static const String service_key_login = "login";
+  static const String service_key_resendOtp = "resendOtp";
   static const String service_key_verifyOtp = "verifyOtp";
   
 }

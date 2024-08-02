@@ -69,10 +69,11 @@ class _CustomInputState extends State<CustomInput> {
         if (widget.showlabel) ResponsiveFonts(text: widget.hintText, size: 12, color: AppColors.primaryColor),
         Container(
           height: widget.height,
-          decoration: UIHelper.roundedBorderWithColor(10, Colors.transparent),
+          decoration: UIHelper.roundedBorderWithColor(10, Colors.transparent,borderColor: AppColors.secondaryColor2,borderWidth: 1),
           child: FormBuilderTextField(
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.black),
             name: widget.fieldname,
+            maxLength: widget.fieldname=="mobile"?10:null,
             initialValue: widget.initvalue ?? "",
             obscureText: widget.showpassword,
             autocorrect: false,

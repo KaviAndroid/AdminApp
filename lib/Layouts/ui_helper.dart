@@ -41,6 +41,7 @@ class UIHelper {
         color: AppColors.grey9,
         size: 12,
       ),
+      counterText: "",
       floatingLabelBehavior: FloatingLabelBehavior.never,
       fillColor: AppColors.white,
       filled: true,
@@ -169,6 +170,43 @@ class UIHelper {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
             decoration: roundedBorderWithColor(10, bgclr, borderColor: AppColors.primaryColor, borderWidth: 2),
             child: ResponsiveFonts(text: title, size: 16, fontWeight: FontWeight.bold, color: textclr)));
+  }
+  static Widget bgDesign() {
+    return Container(
+      height: Get.height,
+      width: Get.width,
+      color: AppColors.white,
+      child: Stack(children: [
+        Positioned(
+          top: -50,left: -20,child:  Container(
+          width: Get.width * 0.40,
+          height: Get.width * 0.40,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+        Positioned(
+          top: -90,right: -40,child:  Container(
+          width: Get.width * 0.90,
+          height: Get.width * 0.80,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+        Positioned(
+          bottom: -20,left: -20,child:  Container(
+          width: Get.width * 0.350,
+          height: Get.width * 0.35,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+        Positioned(
+          bottom: Get.width * 0.25,left: Get.width * 0.25,child:  Container(
+          width: Get.width * 0.15,
+          height: Get.width * 0.15,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+      ],),
+    );
   }
 
   Container NoDataTile({double height = 0}) {

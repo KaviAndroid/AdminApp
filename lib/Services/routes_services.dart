@@ -8,9 +8,7 @@ import '../Controllers/home_controller.dart';
 class Routes {
   static dynamic initial = '/';
   static dynamic signin = '/signin';
-  static dynamic registration = '/registration';
   static dynamic home = '/homepage';
-  static dynamic clusters = '/clusters';
 }
 
 abstract class AppPages {

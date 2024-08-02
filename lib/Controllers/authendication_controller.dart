@@ -20,10 +20,8 @@ import '../models/registration_model.dart';
 class AuthendicationController extends GetxController {
   final PreferenceService pref = Get.find<PreferenceService>();
   final GlobalKey<FormBuilderState> formkey = GlobalKey<FormBuilderState>();
-  final OtpController otpController = Get.put(OtpController());
 
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  TextEditingController mobile = TextEditingController();
 
   RxBool isShowPassword = false.obs;
   RxBool otpPostionedAnimation = false.obs;
@@ -32,30 +30,16 @@ class AuthendicationController extends GetxController {
 
   bool versionErrorFlag = false;
   bool otpVerifiedFlag = false;
-  bool forgotPasswordFlag = false;
 
   String flag = '';
   String finalOTP = '';
   String mobile_no = '';
 
   RxString otpText = ''.obs;
-  RxString selectedGender = ''.obs;
-  RxString selectedLevel = ''.obs;
-  RxString selectedDesignation = ''.obs;
-  RxString selectedDistrict = ''.obs;
-  RxString selectedBlock = ''.obs;
-  RxString selectedVillage = ''.obs;
   RxString profileImagePath = ''.obs;
   RxString titleText = ''.obs;
   RxString forgotMobileNo = ''.obs;
 
-  List genderList = [];
-
-  RxList levelList = [].obs;
-  RxList designationList = [].obs;
-  RxList districtList = [].obs;
-  RxList blockList = [].obs;
-  RxList villageList = [].obs;
 
   RxDouble initialChildSize = 0.4.obs;
 
@@ -73,9 +57,7 @@ class AuthendicationController extends GetxController {
       else
         await utils.showAlert(AlertType.warning, hintText: 'otp_quit'.tr, buttons: [
           UIHelper().actionButton(AppColors.black, "Yes", reducewidth: 4, onPressed: () {
-            selectedGender = ''.obs;
-            selectedDistrict = ''.obs;
-            selectedBlock = ''.obs;
+
             profileImagePath = ''.obs;
 
             isShowPassword = false.obs;
@@ -103,65 +85,14 @@ class AuthendicationController extends GetxController {
     }
   }
 
-  Future<void> forgotPassword() async {
-    btnBtnClicked.value = false;
-    if (!btnBtnClicked.value) {
-      btnBtnClicked.value = true;
-
-      mobile_no = forgotMobileNo.value; //mobile_no Common
-
-      var request = {
-        AppStrings.key_service_id: AppStrings.service_key_sendOTP_for_forgot_password,
-        AppStrings.key_mobile: mobile_no,
-      };
-      var decodedData;
-      try {
-        utils.showProgress();
-        decodedData = await ApiServices().openServiceFunction("FORGOT PASSWORD", request);
-      } catch (e) {
-        Utils().showSnackBar("Unable to fetch response");
-      } finally {
-        utils.hideProgress();
-      }
-
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-        var message = decodedData[AppStrings.key_message];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          btnBtnClicked.value = false;
-          forgotPasswordFlag = true;
-          otpPostionedAnimation.value = true;
-
-          otpText.value = pref.selectedLanguage == 'ta'
-              ? " ${utils.getOTPSecuredText(forgotMobileNo.value)}${"otp_sent_message".tr} "
-              : " ${"otp_sent_message".tr} ${utils.getOTPSecuredText(forgotMobileNo.value)} ";
-          Future.delayed(
-            Durations.long4,
-            () {
-              otpFadeInAnimation.value = true;
-            },
-          );
-
-          utils.showSnackBar(message, type: AlertType.success, durations: Duration(seconds: 3));
-          Get.toNamed(Routes.registration, arguments: {"is_registration": false});
-        } else {
-          utils.showSnackBar(message);
-        }
-      }
-    }
-  }
 
   Future<void> verifyPersonalDetails(bool isRegister) async {
     if (!btnBtnClicked.value) {
       btnBtnClicked.value = true;
 
-      finalOTP = otpController.submitOtp();
-
       if (finalOTP.isNotEmpty && finalOTP.length == 6) {
         var request = {
-          AppStrings.key_service_id: forgotPasswordFlag ? AppStrings.service_key_forgotPasswordverifyOtp : AppStrings.service_key_verifyOtp,
+          AppStrings.key_service_id:  AppStrings.service_key_verifyOtp,
           AppStrings.key_mobile_otp: finalOTP,
           AppStrings.key_mobile: mobile_no,
         };
@@ -175,8 +106,6 @@ class AuthendicationController extends GetxController {
           if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
             otpVerifiedFlag = true;
             btnBtnClicked.value = false;
-            forgotPasswordFlag = false;
-            otpController.clearAll();
             if (isRegister) {
               Get.back();
             } else {
@@ -195,7 +124,7 @@ class AuthendicationController extends GetxController {
 
   Future<void> resendOTP() async {
     var request = {
-      AppStrings.key_service_id: forgotPasswordFlag ? AppStrings.service_key_resendOtpForgotPassword : AppStrings.service_key_resendOtp,
+      AppStrings.key_service_id:  AppStrings.service_key_resendOtp,
       AppStrings.key_mobile: mobile_no,
     };
     var decodedData;
@@ -323,8 +252,7 @@ class AuthendicationController extends GetxController {
     String ss = String.fromCharCodes(Runes('\u0024'));
     /*username.text = "nursery14";
     password.text = "test123#$ss";*/
-    if (username.text.isNotEmpty) {
-      if (password.text.isNotEmpty) {
+    if (mobile.text.isNotEmpty) {
     if (await utils.isOnline()) {
       if (!versionErrorFlag) {
         loginApi(context);
@@ -334,9 +262,6 @@ class AuthendicationController extends GetxController {
     } else {
       Utils().showSnackBar("no_internet".tr, type: AlertType.warning);
     }
-      } else {
-        Utils().showSnackBar('password_empty'.tr, type: AlertType.warning);
-      }
     } else {
       Utils().showSnackBar('user_name_empty'.tr, type: AlertType.warning);
     }
@@ -360,8 +285,7 @@ class AuthendicationController extends GetxController {
       var request = {
         AppStrings.key_service_id: AppStrings.service_key_login,
         AppStrings.key_user_login_key: random_char,
-        AppStrings.key_user_name: username.text.trim(),
-        AppStrings.key_user_password: utils.getSha256(random_char, password.text.trim())
+        AppStrings.key_user_name: mobile.text.trim(),
       };
       var decodedData;
       try {
@@ -383,26 +307,19 @@ class AuthendicationController extends GetxController {
           KEY = decodedData[AppStrings.key_user_key];
           user_data = decodedData[AppStrings.key_user_data];
 
-          var userPassKey = utils.textToMd5(password.text);
+          var userPassKey = utils.textToMd5("password.text");
           decryptedKey = utils.decryption(KEY, userPassKey);
 
           userDataDecrypt = utils.decryption(user_data, userPassKey);
           var userData = jsonDecode(userDataDecrypt);
           print("userData" + userData.toString());
 
-          await pref.setString(AppStrings.key_user_name, username.text.toString().trim());
-          await pref.setString(AppStrings.key_user_password, password.text.toString().trim());
+          await pref.setString(AppStrings.key_user_name, mobile.text.toString().trim());
           await pref.setString(AppStrings.key_user_key, decryptedKey.toString());
-          pref.userName = username.text.toString().trim();
+          pref.userName = mobile.text.toString().trim();
           pref.userPassKey = decryptedKey.toString();
 
-          await pref.setString(AppStrings.key_statecode, userData[AppStrings.key_statecode].toString());
-          await pref.setString(AppStrings.key_dcode, userData[AppStrings.key_dcode].toString());
-          await pref.setString(AppStrings.key_dname, userData[AppStrings.key_dname].toString());
-          await pref.setString(AppStrings.key_bcode, userData[AppStrings.key_bcode].toString());
-          await pref.setString(AppStrings.key_bname, userData[AppStrings.key_bname].toString());
-          await pref.setString(AppStrings.key_pvcode, userData[AppStrings.key_pvcode].toString());
-          await pref.setString(AppStrings.key_pvname, userData[AppStrings.key_pvname].toString());
+
           Get.offNamedUntil(Routes.home, (route) => false);
         } else if (STATUS.toString() == AppStrings.key_ok && RESPONSE.toString() == "LOGIN_FAILED") {
           Utils().showSnackBar("signin_failed".tr);
@@ -414,238 +331,4 @@ class AuthendicationController extends GetxController {
     } catch (e) {}
   }
 
-  Future<void> fetchDropDownLists() async {
-    bool flag = true;
-    if (genderList.isEmpty && districtList.isEmpty) {
-      utils.showProgress();
-      final result = await Future.wait([
-        getGenderList(),
-        getLevels(),
-      ]);
-      utils.hideProgress();
-      update();
-
-      for (var element in result) {
-        if (!element) {
-          flag = false;
-          utils.showSnackBar("Something Went Wrong");
-          break;
-        } else {
-          flag = true;
-        }
-      }
-    }
-    if (flag) {
-      Get.toNamed(Routes.registration, arguments: {"is_registration": true});
-    }
-  }
-
-  Future<bool> getGenderList() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_get_profile_gender,
-      };
-      var decodedData = await ApiServices().openServiceFunction("GENDER_LIST", jsonRequest);
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          genderList.clear();
-          genderList = decodedData[AppStrings.key_json_data];
-          if (genderList.isNotEmpty) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    } catch (e) {
-      e.printError();
-      return false;
-    }
-    return false;
-  }
-
-  Future<bool> getLevels() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_get_profile_level,
-      };
-
-      var decodedData = await ApiServices().openServiceFunction("PROFILE_LEVEL", jsonRequest);
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          List<dynamic> sort_level = decodedData[AppStrings.key_json_data];
-          sort_level.sort((a, b) {
-            return a[AppStrings.key_localbody_code].compareTo(b[AppStrings.key_localbody_code]);
-          });
-          levelList.clear();
-          levelList.addAll(sort_level);
-          return true;
-        }
-      }
-    } catch (e) {
-      e.printError();
-      return false;
-    }
-    return false;
-  }
-
-  Future<void> getDesignationList() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_get_mobile_designation,
-        AppStrings.key_level_id: selectedLevel.value,
-      };
-
-      var decodedData;
-      try {
-        utils.showProgress();
-        decodedData = await ApiServices().openServiceFunction("DESIGNATION_LIST", jsonRequest);
-      } catch (e) {
-        Utils().showSnackBar("Unable to fetch response");
-      } finally {
-        utils.hideProgress();
-      }
-
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          List<dynamic> sort_desig = decodedData[AppStrings.key_json_data];
-          sort_desig.sort((a, b) {
-            return a[AppStrings.key_desig_name].compareTo(b[AppStrings.key_desig_name]);
-          });
-          designationList.clear();
-          designationList.addAll(sort_desig);
-        }
-      }
-    } catch (e) {
-      e.printError();
-    }
-  }
-
-  Future<void> getDistrictList() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_district_list_all,
-      };
-
-      var decodedData;
-      try {
-        utils.showProgress();
-        decodedData = await ApiServices().openServiceFunction("DISTRICT_LIST", jsonRequest);
-      } catch (e) {
-        Utils().showSnackBar("Unable to fetch response");
-      } finally {
-        utils.hideProgress();
-      }
-
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          List<dynamic> sort_dist = decodedData[AppStrings.key_json_data];
-          String sortName = pref.selectedLanguage == 'ta' ? AppStrings.key_dname_ta : AppStrings.key_dname;
-
-          sort_dist.sort((a, b) {
-            return a[sortName].compareTo(b[sortName]);
-          });
-
-          districtList.clear();
-          districtList.addAll(sort_dist);
-        }
-      }
-    } catch (e) {
-      e.printError();
-    }
-  }
-
-  Future<void> getBlockList() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_block_list_district_wise,
-        AppStrings.key_dcode: selectedDistrict.value,
-      };
-
-      var decodedData;
-      try {
-        utils.showProgress();
-        decodedData = await ApiServices().openServiceFunction("BLOCK_LIST", jsonRequest);
-      } catch (e) {
-        Utils().showSnackBar("Unable to fetch response");
-      } finally {
-        utils.hideProgress();
-      }
-
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          if (decodedData[AppStrings.key_json_data].length > 0) {
-            List<dynamic> sort_block = decodedData[AppStrings.key_json_data];
-            String sortName = pref.selectedLanguage == 'ta' ? AppStrings.key_bname_ta : AppStrings.key_bname;
-
-            sort_block.sort((a, b) {
-              return a[sortName].compareTo(b[sortName]);
-            });
-            blockList.clear();
-            blockList.addAll(sort_block);
-          }
-        } else if (status == AppStrings.key_ok && responseValue == AppStrings.key_noRecord) {
-          Utils().showSnackBar(decodedData[AppStrings.key_message] ?? "No Block Found");
-        }
-      }
-    } catch (e) {
-      e.printError();
-    }
-  }
-
-  Future<void> getVillageList() async {
-    try {
-      Map jsonRequest = {
-        AppStrings.key_service_id: AppStrings.service_key_village_list_district_block_wise,
-        AppStrings.key_dcode: selectedDistrict.value,
-        AppStrings.key_bcode: selectedBlock.value,
-      };
-
-      var decodedData;
-      try {
-        utils.showProgress();
-        decodedData = await ApiServices().openServiceFunction("Village_LIST", jsonRequest);
-      } catch (e) {
-        Utils().showSnackBar("Unable to fetch response");
-      } finally {
-        utils.hideProgress();
-      }
-      if (decodedData != null && decodedData != "") {
-        var status = decodedData[AppStrings.key_status];
-        var responseValue = decodedData[AppStrings.key_response];
-
-        if (status == AppStrings.key_ok && responseValue == AppStrings.key_ok) {
-          if (decodedData[AppStrings.key_json_data].length > 0) {
-            List<dynamic> sort_village = decodedData[AppStrings.key_json_data];
-            String sortName = pref.selectedLanguage == 'ta' ? AppStrings.key_pvname_ta : AppStrings.key_pvname;
-
-            sort_village.sort((a, b) {
-              return a[sortName].compareTo(b[sortName]);
-            });
-            villageList.clear();
-            villageList.addAll(sort_village);
-          }
-        } else if (status == AppStrings.key_ok && responseValue == AppStrings.key_noRecord) {
-          Utils().showSnackBar(decodedData[AppStrings.key_message] ?? "No Village Found");
-        }
-      }
-    } catch (e) {
-      e.printError();
-    }
-  }
 }

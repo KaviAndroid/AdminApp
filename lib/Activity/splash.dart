@@ -1,3 +1,4 @@
+import 'package:admin_app/Resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Layouts/ui_helper.dart';
@@ -23,7 +24,7 @@ class _SplashState extends State<Splash> {
       setState(() {});
     });
     Future.delayed(
-      Duration(seconds: 1),
+      Duration(seconds: 2),
       () => Get.toNamed(Routes.signin),
     );
   }
@@ -32,29 +33,31 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Container(
-        decoration: UIHelper.roundedBorderWithBackround(0, ImagePath.bg),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: Duration(milliseconds: 800),
-                padding: EdgeInsets.all(10),
-                decoration: UIHelper.circledecorationWithColor(AppColors.white, Color.fromARGB(255, 27, 101, 237)),
-                height: isAnimation ? Get.width / 1.5 : 0,
-                width: isAnimation ? Get.width / 1.5 : 0,
-                margin: EdgeInsets.all(3),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(ImagePath.admin, fit: BoxFit.cover),
+      body: Stack(
+        children: [
+          UIHelper.bgDesign(),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 800),
+                  padding: EdgeInsets.all(10),
+                  decoration: UIHelper.circledecorationWithColor(AppColors.secondaryColor, AppColors.primaryColor),
+                  height: isAnimation ? Get.width / 2.5 : 0,
+                  width: isAnimation ? Get.width / 2.5 : 0,
+                  margin: EdgeInsets.all(3),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(ImagePath.admin, fit: BoxFit.cover),
+                  ),
                 ),
-              ),
-              UIHelper.verticalSpaceSmall,
-              if (isAnimation) ResponsiveFonts(text: "appname".tr, size: 25, color: AppColors.black, fontWeight: FontWeight.w600),
-            ],
+                UIHelper.verticalSpaceSmall,
+                if (isAnimation) ResponsiveFonts(text: AppStrings.appname, size: 25, color: AppColors.black, fontWeight: FontWeight.w600),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -32,7 +32,6 @@ class _HomepageState extends State<Homepage> {
   }
   Future<void> initialize() async {
     profile = await homecontroller.prefs.getString(AppStrings.key_profile_image);
-    await homecontroller. getVillageList();
     homecontroller.prefs.selectedLanguage = "en";
     var locale = const Locale('en', 'US');
     Get.updateLocale(locale);
@@ -236,8 +235,7 @@ class _HomepageState extends State<Homepage> {
                             radius: 15.0),
                         UIHelper.horizontalSpaceSmall,
                         Expanded(
-                          child: ResponsiveFonts(text: (homecontroller.prefs.selectedLanguage=="en"?homecontroller.villagelist[index][AppStrings.key_pvname]??"":
-                          homecontroller.villagelist[index][AppStrings.key_pvname_ta]??""), size: 15,color: AppColors.white,fontWeight: FontWeight.bold,),
+                          child: ResponsiveFonts(text: (""), size: 15,color: AppColors.white,fontWeight: FontWeight.bold,),
                         ),
                       ],
                     ),
@@ -252,8 +250,7 @@ class _HomepageState extends State<Homepage> {
                             Expanded(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){Get.toNamed(Routes.clusters,arguments: {AppStrings.key_pvname:(homecontroller.prefs.selectedLanguage=="en"?homecontroller.villagelist[index][AppStrings.key_pvname]??"":
-                                homecontroller.villagelist[index][AppStrings.key_pvname_ta]??""),AppStrings.key_pvcode:homecontroller.villagelist[index][AppStrings.key_pvcode].toString(),"flag":"view"});},
+                                onTap: (){},
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                                   decoration: UIHelper.roundedBorderWithColor(5, AppColors.white),
@@ -271,8 +268,7 @@ class _HomepageState extends State<Homepage> {
                             Expanded(
                               flex: 1,
                               child: InkWell(
-                                onTap: (){Get.toNamed(Routes.clusters,arguments: {AppStrings.key_pvname:(homecontroller.prefs.selectedLanguage=="en"?homecontroller.villagelist[index][AppStrings.key_pvname]??"":
-                                homecontroller.villagelist[index][AppStrings.key_pvname_ta]??""),AppStrings.key_pvcode:homecontroller.villagelist[index][AppStrings.key_pvcode].toString(),"flag":"entry"});},
+                                onTap: (){},
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                                   decoration: UIHelper.roundedBorderWithColor(5, AppColors.white),
