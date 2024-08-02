@@ -1,3 +1,4 @@
+import 'package:admin_app/Activity/DoctorDetails.dart';
 import 'package:get/get.dart';
 import '../Activity/signin.dart';
 import '../Activity/splash.dart';
@@ -9,6 +10,7 @@ class Routes {
   static dynamic initial = '/';
   static dynamic signin = '/signin';
   static dynamic home = '/homepage';
+  static dynamic doctordetails = '/doctordetails';
 }
 
 abstract class AppPages {
@@ -20,13 +22,16 @@ abstract class AppPages {
     GetPage(
       name: Routes.signin,
       page: () => SigninView(),
-      binding: BindingsBuilder.put(() => AuthendicationController()),
     ),
     GetPage(
       name: Routes.home,
       page: () => Homepage(),
-      binding: BindingsBuilder.put(() => HomeController()),
     ),
+     GetPage(
+       transitionDuration: Duration(seconds: 1),
+          name: Routes.doctordetails,
+          page: () => DoctorDetails(),
+        ),
 
   ];
 }

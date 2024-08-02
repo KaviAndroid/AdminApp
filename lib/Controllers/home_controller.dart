@@ -9,20 +9,11 @@ import '../Services/utils.dart';
 
 class HomeController extends GetxController {
   bool isEdit = false;
-  List villagelist = [];
+  List doctorslist = [];
+  List filteredDoctorslist = [];
+  bool searchenabled = false;
   final PreferenceService prefs = Get.find<PreferenceService>();
   Utils utils = Utils();
-  HomeController() {
-    initialize();
-  }
-
-  Future<void> initialize() async {
-    try {
-
-    } catch (e) {
-      e.printError();
-    }
-  }
 
 
 }

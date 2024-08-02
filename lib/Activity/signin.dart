@@ -13,80 +13,58 @@ import '../Services/routes_services.dart';
 import 'package:responsive_fonts/responsive_fonts.dart';
 
 class SigninView extends StatelessWidget {
-  const SigninView({super.key});
+   SigninView({super.key});
+  final AuthendicationController controller = Get.find<AuthendicationController>();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AuthendicationController>(builder: (controller) {
-      return Stack(
-        children: [
-          UIHelper.bgDesign(),
-          Scaffold(
-            resizeToAvoidBottomInset: true,
-            backgroundColor: Colors.transparent,
-            body: Container(
-              padding: EdgeInsets.all(30),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: Get.width* 0.60,),
-                    ResponsiveFonts(text: "Sign In", size: 18, fontWeight: FontWeight.w500, color: AppColors.primaryColorDark),
-                    UIHelper.verticalSpaceMedium,
-                    CustomInput(
-                      onEnter: (val) {
-                        controller.mobile.text=val.toString();
-                        print(val);
-                      },
-                      hintText: "Mobile No",
-                      fieldname: "mobile",
-                      fieldType: FieldType.number,
-                      validating: (value) {
-                        return null;
-                      },
-                    ),
-                    UIHelper.verticalSpaceLarge,
-                    UIHelper().actionButton(AppColors.primaryColor, "Get OTP".tr, radius: 25, onPressed: () {
-                      if (controller.utils.isNumberValid(controller.mobile.text)) {
-                        showModalBottomSheet(
-                          context: context,
-                          isDismissible: true,
-                          elevation: 3,
-                          showDragHandle: true,
-                          enableDrag: true,
-                          isScrollControlled: true,
-                          builder: (builder) => Padding(
-                            padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: bottomSheet(context, controller),
-                          ),
-                        ).whenComplete(
-                              () {
-                            controller.forgotMobileNo.value = '';
-                            controller.initialChildSize.value = 0.4;
-                          },
-                        );
-                      } else {
-                        controller.utils.showSnackBar("Pleas Enter Valid Mobile Number");
-                      }
-                      // controller.login(context);
-                    }, reducewidth: 1.35),
-                    UIHelper.verticalSpaceMedium,
-                  ],
-                ),
+    return Stack(
+      children: [
+        UIHelper.bgDesign(),
+        Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.transparent,
+          body: Container(
+            padding: EdgeInsets.all(30),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: Get.width* 0.60,),
+                  ResponsiveFonts(text: "Sign In", size: 18, fontWeight: FontWeight.w500, color: AppColors.primaryColorDark),
+                  UIHelper.verticalSpaceMedium,
+                  CustomInput(
+                    onEnter: (val) {
+                      controller.mobile.text=val.toString();
+                      print(val);
+                    },
+                    hintText: "Mobile No",
+                    fieldname: "mobile",
+                    fieldType: FieldType.number,
+                    validating: (value) {
+                      return null;
+                    },
+                  ),
+                  UIHelper.verticalSpaceLarge,
+                  UIHelper().actionButton(AppColors.primaryColor, "Get OTP".tr, radius: 25, onPressed: () {
+                    Get.toNamed(Routes.home);
+                    // controller.login(context);
+                  }, reducewidth: 1.35),
+                  UIHelper.verticalSpaceMedium,
+                ],
               ),
             ),
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget bottomSheet(context, AuthendicationController controller) {
     return Obx(
       () => DraggableScrollableSheet(
         expand: false,
-        initialChildSize: controller.initialChildSize.value,
+        initialChildSize: 0.5,
         builder: (context, scrollController) => SingleChildScrollView(
           controller: scrollController,
           child: Container(

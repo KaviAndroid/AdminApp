@@ -117,6 +117,27 @@ class UIHelper {
               ]
             : []);
   }
+  static BoxDecoration roundedBorderWithGradientColor(double radius, Color bg1,Color bg2,
+      {Color borderColor = Colors.transparent, double borderWidth = 0, bool isShadow = false, Color shadowcolor = Colors.black45}) {
+    return BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        border: Border.all(width: borderWidth, color: borderColor),
+        gradient:LinearGradient(
+            colors: [bg1, bg2],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+        boxShadow: isShadow
+            ? [
+                BoxShadow(
+                  color: shadowcolor,
+                  offset: const Offset(2, 2),
+                  blurRadius: 3.0,
+                )
+              ]
+            : []);
+  }
 
   ///******** Container BOX Decoration **********///
   static BoxDecoration customEdgeBorderWithColor(double tlradius, double trradius, double blradius, double brradius, Color backgroundColor,
@@ -193,11 +214,43 @@ class UIHelper {
         ),),
         Positioned(
           bottom: -20,left: -20,child:  Container(
-          width: Get.width * 0.350,
+          width: Get.width * 0.35,
           height: Get.width * 0.35,
           padding: EdgeInsets.all(30),
           decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
         ),),
+        Positioned(
+          bottom: Get.width * 0.25,left: Get.width * 0.25,child:  Container(
+          width: Get.width * 0.15,
+          height: Get.width * 0.15,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+      ],),
+    );
+  }
+  static Widget bgDesign2() {
+    return Container(
+      height: Get.height,
+      width: Get.width,
+      color: AppColors.white,
+      child: Stack(children: [
+        Positioned(
+          bottom: -20,left: -20,child:  Container(
+          width: Get.width * 0.35,
+          height: Get.width * 0.35,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+        ),),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+          width: Get.width * 0.350,
+          height: Get.width * 0.35,
+          padding: EdgeInsets.all(30),
+          decoration: UIHelper.circledecorationWithColor(AppColors.primaryColor, AppColors.primaryLiteColor),
+                  ),
+        ),
         Positioned(
           bottom: Get.width * 0.25,left: Get.width * 0.25,child:  Container(
           width: Get.width * 0.15,

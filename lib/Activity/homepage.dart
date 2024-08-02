@@ -22,7 +22,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   Utils utils = Utils();
-  String langText = 'English';
   final HomeController homecontroller = Get.find<HomeController>();
   String profile = "";
   @override
@@ -32,268 +31,161 @@ class _HomepageState extends State<Homepage> {
   }
   Future<void> initialize() async {
     profile = await homecontroller.prefs.getString(AppStrings.key_profile_image);
-    homecontroller.prefs.selectedLanguage = "en";
-    var locale = const Locale('en', 'US');
-    Get.updateLocale(locale);
     setState(() {});
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body:Container(
-        padding: EdgeInsets.all(10),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
-            PopupMenuButton<String>(
-              color: AppColors.white,
-              onSelected: ((value) {
-                if (value != langText) {
-                  langText = value;
-                  utils.languageChange(value);
-                }
-                setState(() {});
-              }),
-              itemBuilder: (BuildContext context) {
-                return {'தமிழ்', 'English'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: ResponsiveFonts(text: choice, color: AppColors.black, size: 14),
-                  );
-                }).toList();
-              },
-              child: Row(
-                children: [
-                  Container(padding: EdgeInsets.only(left: 10), child: ResponsiveFonts(text: langText, color: AppColors.white, size: 14)),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_downward_rounded, size: 15, color:AppColors.white),
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed: (){
-                utils.showAlert(AlertType.warning,hintText: "logout_msg".tr,buttons: [
-                  UIHelper().actionButton(reducewidth:4,AppColors.red, "cancel".tr,onPressed: (){
-                    Get.back();
-                  }),
-                  UIHelper().actionButton(reducewidth: 4,AppColors.green, "ok".tr,onPressed: (){
-                    Get.toNamed(Routes.signin);
-                  })
-                ]);
+    return Stack(
+      children: [
+        // UIHelper.bgDesign2(),
+        Scaffold(
+          backgroundColor: Colors.white,
+          body:Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+              Row(
+                mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
+                IconButton(
+                  onPressed: (){
+                    utils.showAlert(AlertType.warning,hintText: "logout_msg".tr,buttons: [
+                      UIHelper().actionButton(reducewidth:4,AppColors.red, "cancel".tr,onPressed: (){
+                        Get.back();
+                      }),
+                      UIHelper().actionButton(reducewidth: 4,AppColors.green, "ok".tr,onPressed: (){
+                        Get.toNamed(Routes.signin);
+                      })
+                    ]);
 
-              },
-              icon: Icon(Icons.power_settings_new,color:AppColors.white),
-            )
-          ],),
-          Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Container(
-                  margin: EdgeInsets.only(top: Get.height/16,left: 10,right: 10),
-                  padding: EdgeInsets.only(top: Get.height/12,left: 10,right: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLiteColor_2,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primaryColor.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child:Column(
-                    children: [
-                      ResponsiveFonts(text: 'user_name'.tr, size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
-                      UIHelper.verticalSpaceSmall,
-                      ResponsiveFonts(text: "("+"designation".tr+")", size: 14,color: AppColors.primaryColor,textalignment: TextAlign.center,),
-                      UIHelper.verticalSpaceSmall,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(flex: 1,child: ResponsiveFonts(text:  "district".tr+"\n"+"Kancheepuram".tr, size: 14,color: AppColors.primaryColor,textalignment: TextAlign.center,overflow: TextOverflow.ellipsis,)),
-                          UIHelper.horizontalSpaceSmall,
-                          Expanded(flex: 1,child: ResponsiveFonts(text: "block".tr+"\n"+"Angambakkam".tr, size: 14,color: AppColors.primaryColor,textalignment: TextAlign.center,overflow: TextOverflow.ellipsis,)),
-                        ],
-                      ),
-                      UIHelper.verticalSpaceMedium,
-                      // ResponsiveFonts(text: "village_name".tr, size: 14,color: AppColors.primaryColor,),
-                    ],
-                  )
-              ),
-/*              Container(
-                width: Get.width/4,
-                height: Get.height/8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // shape: BoxShape.circle,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      width: 2,
-                      color: AppColors.primaryColor.withOpacity(0.4)
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryColor.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
+                  },
+                  icon: Icon(Icons.menu_rounded,color:AppColors.primaryColorDark),
                 ),
-                child: profile != "" && profile != "null"&& profile != null
-                    ? InkWell(
-                  onTap: () => showDialog(
-                      builder: (BuildContext context) => AlertDialog(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        insetPadding: EdgeInsets.all(5),
-                        title: Container(
-                          decoration: BoxDecoration(),
-                          width: Get.width,
-                          height: Get.height / 2,
-                          child: Image.asset(ImagePath.logo,fit: BoxFit.fill,),
-                        ),
-                      ),
-                      context: context),
-                  child: Image.memory(
-                    base64Decode(profile),
-                    fit: BoxFit.fill,
-                  ),
+                ResponsiveFonts(text: 'Home', size: 14,color: AppColors.primaryColorDark,fontWeight: FontWeight.bold,),
+
+                IconButton(
+                  onPressed: (){
+                    utils.showAlert(AlertType.warning,hintText: "logout_msg".tr,buttons: [
+                      UIHelper().actionButton(reducewidth:4,AppColors.red, "cancel".tr,onPressed: (){
+                        Get.back();
+                      }),
+                      UIHelper().actionButton(reducewidth: 4,AppColors.green, "ok".tr,onPressed: (){
+                        Get.toNamed(Routes.signin);
+                      })
+                    ]);
+
+                  },
+                  icon: Icon(Icons.power_settings_new,color:AppColors.primaryColorDark),
                 )
-                    : Image.asset(ImagePath.logo,fit: BoxFit.fill,),
-              ),*/
-              InkWell(
-                onTap: () => showDialog(
-                    builder: (BuildContext context) => AlertDialog(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      insetPadding: EdgeInsets.all(5),
-                      title: Container(
-                        decoration: BoxDecoration(),
-                        width: Get.width,
-                        height: Get.height / 2,
-                        child: profile != "" && profile != "null"&& profile != null ? Image.memory(base64Decode(profile),)
-                            : Image.asset(ImagePath.gallery),
+              ],),
+                UIHelper.verticalSpaceSmall,
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                alignment: Alignment.centerLeft,
+                  child: ResponsiveFonts(text: 'Hi Admin!', size: 20,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
+              UIHelper.verticalSpaceMedium,
+              Container(decoration: UIHelper.roundedBorderWithColor(10, AppColors.white,borderWidth: 2,borderColor: AppColors.primaryColor,),
+             padding: EdgeInsets.all(20),
+              child: Row(children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    ResponsiveFonts(text: 'Welcome!', size: 16,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
+                    UIHelper.verticalSpaceSmall,
+                    ResponsiveFonts(text: 'Lets start doctors profile validation.', size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.normal,)
+                  ],),
+                ),
+                Image.asset(ImagePath.select_profile, fit: BoxFit.cover,width: Get.width/3,height: Get.width/3,),
+              ],),),
+                UIHelper.verticalSpaceSmall,
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 5),
+                  decoration: UIHelper.roundedBorderWithColor(30, AppColors.primaryLiteColor_4),
+                  child: Center(
+                    child: TextField(
+                      cursorColor: AppColors.grey2,
+                      maxLines: null,
+                      onChanged: (String value) async {
+                        onSearchQueryChanged(value);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: "Search",
+                        hintStyle: TextStyle(color: AppColors.grey2),
+                        border: InputBorder.none,
                       ),
                     ),
-                    context: context),
-              child: Container(
-                width: Get.width/4,
-                height: Get.height/8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // shape: BoxShape.circle,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      width: 2,
-                      color: AppColors.primaryColor.withOpacity(0.4)
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryColor.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: profile != "" && profile != "null"&& profile != null ? MemoryImage(base64Decode(profile),)
-                        : AssetImage(ImagePath.gallery),
                   ),
                 ),
-              ),
-            )
-            ],),
-          UIHelper.verticalSpaceMedium,
-          ResponsiveFonts(text: "village_list".tr+(" ("+(homecontroller.villagelist.length.toString())+")"), size: 16,color: AppColors.white,fontWeight: FontWeight.bold,),
-          UIHelper.verticalSpaceSmall,
-          Expanded(
-            child: ListView.builder(
-              itemCount: homecontroller.villagelist.length,
-              itemBuilder: (context, index) => Container(
-                decoration: UIHelper.roundedBorderWithColor(10, AppColors.secondaryLiteColorTrans),
-                margin: EdgeInsets.fromLTRB(20,10,20,10),
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                            backgroundColor: AppColors.white,
-                            child: Container(
-                              padding: EdgeInsets.all(0),
-                              child:ResponsiveFonts(text: (index+1).toString(), size: 14,color: AppColors.grey7,fontWeight: FontWeight.bold,),),
-                            radius: 15.0),
-                        UIHelper.horizontalSpaceSmall,
-                        Expanded(
-                          child: ResponsiveFonts(text: (""), size: 15,color: AppColors.white,fontWeight: FontWeight.bold,),
-                        ),
-                      ],
-                    ),
-                    UIHelper.verticalSpaceSmall,
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: Get.width/1.7,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: InkWell(
-                                onTap: (){},
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                                  decoration: UIHelper.roundedBorderWithColor(5, AppColors.white),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.remove_red_eye_sharp,color: AppColors.grey2,size: 18,),
-                                      UIHelper.horizontalSpaceTiny,
-                                      Flexible(child: ResponsiveFonts(text: "view_data".tr, size: 12,color: AppColors.grey7,fontWeight: FontWeight.bold,)),
-                                    ],
-                                  ),
+                UIHelper.verticalSpaceMedium,
+              Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Doctors List", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
+              UIHelper.verticalSpaceMedium,
+              Expanded(
+                child:GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  children: List.generate(10/*homecontroller.searchenabled?homecontroller.filteredDoctorslist.length:homecontroller.doctorslist.length*/, (index) {
+                   // final item=homecontroller.searchenabled?homecontroller.filteredDoctorslist[index]:homecontroller.doctorslist[index];
+                    String tag="Hero"+index.toString();
+                    return Container(
+                      width:Get.width,
+                      padding: EdgeInsets.all(10),
+                      decoration: UIHelper.roundedBorderWithColor(10, AppColors.primaryLiteColor_2),
+                      child: Material(
+                        color:AppColors.primaryLiteColor_2 ,
+                        child: InkWell(
+                          onTap: (){
+                            Get.toNamed(Routes.doctordetails,arguments: {"tag":tag});
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Hero(
+                                tag:tag,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.asset(ImagePath.admin, fit: BoxFit.cover,height: 80,width: 80,),
                                 ),
                               ),
                             ),
-                            UIHelper.horizontalSpaceSmall,
-                            Expanded(
-                              flex: 1,
-                              child: InkWell(
-                                onTap: (){},
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                                  decoration: UIHelper.roundedBorderWithColor(5, AppColors.white),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit_note_sharp,color: AppColors.grey2,size: 18,),
-                                      UIHelper.horizontalSpaceTiny,
-                                      Flexible(child: ResponsiveFonts(text: "enter_data".tr, size: 12,color: AppColors.grey7,fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
+                              UIHelper.verticalSpaceSmall,
+                            ResponsiveFonts(text: 'Dr.Test User', size: 15,color: AppColors.primaryColorDark,fontWeight: FontWeight.normal,),
+                            UIHelper.verticalSpaceTiny,
+                            ResponsiveFonts(text: 'Cardiologist', size: 13,color: AppColors.primaryLiteColor,fontWeight: FontWeight.normal,)
 
-                                ),
-                              ),
-                            ),
                           ],),
+                        ),
                       ),
-                    )
-                  ],
-                ),),
-
-            ),
+                    );
+                  }
+              ),
+              ),
+              ),
+                UIHelper.verticalSpaceMedium,
+            ],),
           ),
-        ],),
-      ),
+        ),
+      ],
     );
   }
-
+  Future<void> onSearchQueryChanged(String query) async {
+    homecontroller.doctorslist.clear();
+    homecontroller.searchenabled = true;
+    for (var data in homecontroller.doctorslist) {
+      String name = data["name"].toString().toLowerCase();
+      String specialist = data["specialist"].toString().toLowerCase();
+       if (name.contains(query.toLowerCase()) ||
+           specialist.contains(query.toLowerCase())) {
+        homecontroller.filteredDoctorslist.add(data);
+      }
+    }
+    setState(() {
+    });
+  }
 }
