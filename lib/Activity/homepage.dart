@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:admin_app/Activity/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:responsive_fonts/responsive_fonts.dart';
 
@@ -8,10 +11,16 @@ import '../../Layouts/custom_alert.dart';
 import '../../Services/routes_services.dart';
 import '../../Services/utils.dart';
 import '../Controllers/home_controller.dart';
+import '../Layouts/CurvedNavigationBar.dart';
 import '../Layouts/ui_helper.dart';
 import '../Resources/colors.dart';
 import '../Resources/image_path.dart';
 import '../Resources/strings.dart';
+import 'AddNewArticle.dart';
+import 'Articles.dart';
+import 'PendingDoctors.dart';
+import 'RejectedDoctors.dart';
+import 'Settings.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -24,6 +33,7 @@ class _HomepageState extends State<Homepage> {
   Utils utils = Utils();
   final HomeController homecontroller = Get.find<HomeController>();
   String profile = "";
+  int _page = 0;
   @override
   void initState() {
     super.initState();
@@ -34,144 +44,137 @@ class _HomepageState extends State<Homepage> {
     setState(() {});
 
   }
+  Future<bool> showExitPopup({isLogout = false}) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ResponsiveFonts(text:isLogout ? 'Logout' : 'Exit App',color:  AppColors.black,size: 13
+
+          ,),
+        content: ResponsiveFonts(text:isLogout ? 'Are you sure to logout' : 'Do you want to exit from app',color:  AppColors.black,size: 12,),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            //return false when click on "NO"
+            child: Text(
+              'No',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: isLogout
+                ? () {
+              homecontroller.prefs.cleanAllPreferences();
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Splash()), (route) => false);
+            }
+                : () {
+              if (Platform.isAndroid) {
+                SystemNavigator.pop();
+              } else if (Platform.isIOS) {
+                exit(0);
+              }
+            },
+            child: Text(
+              'Yes',
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false; //if showDialouge had returned null, then return false
+  }
+  List<Widget> pageList = [
+    Articles(),
+    PendingDoctors(),
+    AddNewArticle(),
+    RejectedDoctors(),
+    Settings(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // UIHelper.bgDesign2(),
-        Scaffold(
-          backgroundColor: Colors.white,
-          body:Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-              Row(
-                mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
-                IconButton(
-                  onPressed: (){
-                    utils.showAlert(AlertType.warning,hintText: "logout_msg".tr,buttons: [
-                      UIHelper().actionButton(reducewidth:4,AppColors.red, "cancel".tr,onPressed: (){
-                        Get.back();
-                      }),
-                      UIHelper().actionButton(reducewidth: 4,AppColors.green, "ok".tr,onPressed: (){
-                        Get.toNamed(Routes.signin);
-                      })
-                    ]);
-
-                  },
-                  icon: Icon(Icons.menu_rounded,color:AppColors.primaryColorDark),
+    return WillPopScope(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        extendBody: true,
+        bottomNavigationBar: CurvedNavigationBar(
+          index: 2,
+          buttonBackgroundColor: AppColors.primaryColorDark,
+          backgroundColor: Colors.transparent,
+          color: AppColors.primaryColorDark,
+          items: [
+            CurvedNavigationBarItem(
+                child: Image.asset(
+                  height: 25,
+                  width: 25,
+                  ImagePath.article,
+                  color: Colors.white,
                 ),
-                ResponsiveFonts(text: 'Home', size: 14,color: AppColors.primaryColorDark,fontWeight: FontWeight.bold,),
-
-                IconButton(
-                  onPressed: (){
-                    utils.showAlert(AlertType.warning,hintText: "logout_msg".tr,buttons: [
-                      UIHelper().actionButton(reducewidth:4,AppColors.red, "cancel".tr,onPressed: (){
-                        Get.back();
-                      }),
-                      UIHelper().actionButton(reducewidth: 4,AppColors.green, "ok".tr,onPressed: (){
-                        Get.toNamed(Routes.signin);
-                      })
-                    ]);
-
-                  },
-                  icon: Icon(Icons.power_settings_new,color:AppColors.primaryColorDark),
-                )
-              ],),
-                UIHelper.verticalSpaceSmall,
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                alignment: Alignment.centerLeft,
-                  child: ResponsiveFonts(text: 'Hi Admin!', size: 20,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
-              UIHelper.verticalSpaceMedium,
-              Container(decoration: UIHelper.roundedBorderWithColor(10, AppColors.white,borderWidth: 2,borderColor: AppColors.primaryColor,),
-             padding: EdgeInsets.all(20),
-              child: Row(children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                    ResponsiveFonts(text: 'Welcome!', size: 16,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
-                    UIHelper.verticalSpaceSmall,
-                    ResponsiveFonts(text: 'Lets start doctors profile validation.', size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.normal,)
-                  ],),
+                label: 'Articles',
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis
+                )),
+            CurvedNavigationBarItem(
+                child: Image.asset(
+                  ImagePath.doctor,
+                  height: 25,
+                  width: 25,
+                  color: Colors.white,
                 ),
-                Image.asset(ImagePath.select_profile, fit: BoxFit.cover,width: Get.width/3,height: Get.width/3,),
-              ],),),
-                UIHelper.verticalSpaceSmall,
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(top: 5),
-                  decoration: UIHelper.roundedBorderWithColor(30, AppColors.primaryLiteColor_4),
-                  child: Center(
-                    child: TextField(
-                      cursorColor: AppColors.grey2,
-                      maxLines: null,
-                      onChanged: (String value) async {
-                        onSearchQueryChanged(value);
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        hintText: "Search",
-                        hintStyle: TextStyle(color: AppColors.grey2),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
+                label: 'Doctors',
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis
+                )),
+            CurvedNavigationBarItem(
+                child: Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.white,
+                  size: 25,
                 ),
-                UIHelper.verticalSpaceMedium,
-              Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Doctors List", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
-              UIHelper.verticalSpaceMedium,
-              Expanded(
-                child:GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  children: List.generate(10/*homecontroller.searchenabled?homecontroller.filteredDoctorslist.length:homecontroller.doctorslist.length*/, (index) {
-                   // final item=homecontroller.searchenabled?homecontroller.filteredDoctorslist[index]:homecontroller.doctorslist[index];
-                    String tag="Hero"+index.toString();
-                    return Container(
-                      width:Get.width,
-                      padding: EdgeInsets.all(10),
-                      decoration: UIHelper.roundedBorderWithColor(10, AppColors.primaryLiteColor_2),
-                      child: Material(
-                        color:AppColors.primaryLiteColor_2 ,
-                        child: InkWell(
-                          onTap: (){
-                            Get.toNamed(Routes.doctordetails,arguments: {"tag":tag});
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Hero(
-                                tag:tag,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: Image.asset(ImagePath.admin, fit: BoxFit.cover,height: 80,width: 80,),
-                                ),
-                              ),
-                            ),
-                              UIHelper.verticalSpaceSmall,
-                            ResponsiveFonts(text: 'Dr.Test User', size: 15,color: AppColors.primaryColorDark,fontWeight: FontWeight.normal,),
-                            UIHelper.verticalSpaceTiny,
-                            ResponsiveFonts(text: 'Cardiologist', size: 13,color: AppColors.primaryLiteColor,fontWeight: FontWeight.normal,)
-
-                          ],),
-                        ),
-                      ),
-                    );
-                  }
-              ),
-              ),
-              ),
-                UIHelper.verticalSpaceMedium,
-            ],),
-          ),
+                label: 'Add',
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    overflow: TextOverflow.ellipsis
+                )),
+            CurvedNavigationBarItem(
+                child: Image.asset(
+                  ImagePath.rejected,
+                  color: Colors.white,
+                  height: 25,
+                  width: 25,
+                ),
+                label: 'Rejected Drs',
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis
+                )),
+            CurvedNavigationBarItem(
+                child: Image.asset(
+                  ImagePath.settings,
+                  color: Colors.white,
+                  height: 22,
+                  width: 22,
+                ),
+                label: 'Settings',
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis
+                )),
+          ],
+          onTap: (index) {
+            setState(() {
+              _page = index;
+            });
+          },
         ),
-      ],
+        body: pageList.elementAt(_page),
+      ),
     );
   }
   Future<void> onSearchQueryChanged(String query) async {
