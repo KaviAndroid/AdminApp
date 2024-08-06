@@ -101,25 +101,33 @@ class _PendingDoctorsState extends State<PendingDoctors> {
                             onTap: (){
                               Get.toNamed(Routes.doctordetails,arguments: {"tag":tag,"flag":"pending"});
                             },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
                               children: [
-                                Hero(
-                                  tag:tag,
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(30),
-                                      child: Image.asset(ImagePath.admin, fit: BoxFit.cover,height: 80,width: 80,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Hero(
+                                      tag:tag,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(30),
+                                          child: Image.asset(ImagePath.admin, fit: BoxFit.cover,height: 80,width: 80,),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                UIHelper.verticalSpaceSmall,
-                                ResponsiveFonts(text: 'Dr.Test User', size: 15,color: AppColors.primaryColorDark,fontWeight: FontWeight.normal,),
-                                UIHelper.verticalSpaceTiny,
-                                ResponsiveFonts(text: 'Cardiologist', size: 13,color: AppColors.primaryLiteColor,fontWeight: FontWeight.normal,)
+                                    UIHelper.verticalSpaceSmall,
+                                    ResponsiveFonts(text: 'Dr.Test User', size: 15,color: AppColors.primaryColorDark,fontWeight: FontWeight.normal,),
+                                    UIHelper.verticalSpaceTiny,
+                                    ResponsiveFonts(text: 'Cardiologist', size: 13,color: AppColors.primaryLiteColor,fontWeight: FontWeight.normal,)
 
-                              ],),
+                                  ],),
+                                Positioned(
+                                  bottom: 0,
+                                    right: 0,
+                                    child: Icon(Icons.arrow_forward_outlined,color: AppColors.primaryLiteColor,))
+                              ],
+                            ),
                           ),
                         ),
                       );

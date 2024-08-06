@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:admin_app/Activity/view_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_fonts/responsive_fonts.dart';
@@ -8,6 +10,7 @@ import '../../Layouts/custom_alert.dart';
 import '../../Services/routes_services.dart';
 import '../../Services/utils.dart';
 import '../Controllers/home_controller.dart';
+import '../Controllers/view_image_controller.dart';
 import '../Layouts/ReadMoreLess.dart';
 import '../Layouts/ui_helper.dart';
 import '../Resources/colors.dart';
@@ -24,6 +27,8 @@ class Articles extends StatefulWidget {
 class _ArticlesState extends State<Articles> {
   Utils utils = Utils();
   final HomeController homecontroller = Get.find<HomeController>();
+  final ViewImageController viewImageController = Get.find<ViewImageController>();
+
   String profile = "";
   String art = "A proper article indicates that its noun is proper, and refers to a unique entity. It may be the name of a person, the name of a place, the name of a planet, etc. The Māori language has the proper article a, which is used for personal nouns; so, 'a Pita' means 'Peter'. In Māori, when the personal nouns have the definite or indefinite article as an important part of it, both articles are present; for example, the phrase 'a Te Rauparaha', which contains both the proper article a and the definite article Te refers to the person name Te Rauparaha.";
   String ss = String.fromCharCodes(Runes('\u0024'));
@@ -155,7 +160,8 @@ class _ArticlesState extends State<Articles> {
                         child: Stack(
                           children: [
                             Column(children: [
-                              InkWell(onTap: (){ showDialog(
+                              InkWell(onTap: (){
+                                /*showDialog(
                                   builder: (BuildContext context) => AlertDialog(
                                     elevation: 0,
                                     backgroundColor: Colors.transparent,
@@ -168,13 +174,28 @@ class _ArticlesState extends State<Articles> {
                                           : Image.asset(ImagePath.admin),
                                     ),
                                   ),
-                                  context: context);},child: Image.asset(ImagePath.admin,height: Get.width/2,fit: BoxFit.fill,)),
+                                  context: context);*/
+                                viewImageController.imageList.value.isNotEmpty?showStageImage(viewImageController,0):null;
+
+                              },child:viewImageController.imageList.value.isNotEmpty ?Image.file(File(viewImageController.imageList.value[0][AppStrings.key_image])):
+                              Image.asset(ImagePath.admin,height: Get.width/2,fit: BoxFit.fill,)),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ExpandableText(art,trimLines: 5,txtcolor: AppColors.txtclr,)
                                 // ResponsiveFonts(text: art, size: 14,color: AppColors.txtclr,fontWeight: FontWeight.normal,),
                               )
                             ],),
+                            Positioned(
+                                top: 10,
+                                left: 10,
+                                child: buildBlur(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    color: Colors.black.withOpacity(0.40),
+                                    child: ResponsiveFonts(text: "${1} / ${viewImageController.imageList.length}",fontWeight: FontWeight.bold, size: 13, color: AppColors.white, decoration: TextDecoration.none),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
                             Positioned(
                               right: 0,
                                 child: Column(
@@ -191,7 +212,7 @@ class _ArticlesState extends State<Articles> {
                                   child: Icon(Icons.edit,size: 25,color: AppColors.white,),)
 
                               ],
-                            ))
+                            )),
                           ],
                         ),
 

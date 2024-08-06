@@ -85,8 +85,8 @@ class _AddNewArticleState extends State<AddNewArticle> {
                           right: 10,
                           child: buildBlur(
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              color: Colors.black.withOpacity(0.25),
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              color: Colors.black.withOpacity(0.40),
                               child: ResponsiveFonts(text: "${1} / ${viewImageController.imageList.length}",fontWeight: FontWeight.bold, size: 13, color: AppColors.white, decoration: TextDecoration.none),
                             ),
                             borderRadius: BorderRadius.circular(10),
