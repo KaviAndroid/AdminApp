@@ -29,4 +29,5 @@ class AppColors {
   static const Color blue = Color(0xFF3797CF);
   static const Color blueDark = Color(0xFF017fe6);
   static const Color secondaryLiteColorTrans = Color(0x51FFFFFF);
+  static const Color fulltrans = Color(0xFFFFFF);
 }

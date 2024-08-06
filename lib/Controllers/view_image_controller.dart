@@ -12,9 +12,12 @@ class ViewImageController extends GetxController {
   final PreferenceService prefs = Get.find<PreferenceService>();
 
   RxBool shimmerLoading = false.obs;
-  RxList imageList = [].obs;
+  List imageList = [];
+  RxList articleList = [].obs;
 
   Map arguments = {};
+  String description="";
+  String amount="";
 
   void updateShimmer() {
     shimmerLoading.value = !shimmerLoading.value;

@@ -73,7 +73,7 @@ class ExpandableTextState extends State<ExpandableText> {
             style: TextStyle(
               height: 1.3,
               color: widgetColor,
-                fontSize: 13
+                fontSize: 14
             ),
             children: <TextSpan>[link],
           );
@@ -82,11 +82,12 @@ class ExpandableTextState extends State<ExpandableText> {
             text: widget.text,
             style: TextStyle(
               color: widgetColor,
-              fontSize: 13
+              fontSize: 14
             ),
           );
         }
         return RichText(
+          textAlign: TextAlign.start,
           softWrap: true,
           overflow: TextOverflow.clip,
           text: textSpan,

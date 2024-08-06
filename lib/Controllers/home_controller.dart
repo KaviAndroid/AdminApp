@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:image_picker/image_picker.dart';
 import '../Layouts/custom_alert.dart';
 import '../Resources/strings.dart';
@@ -16,6 +17,7 @@ class HomeController extends GetxController {
   bool searchenabled = false;
   final PreferenceService prefs = Get.find<PreferenceService>();
   Utils utils = Utils();
+  RxInt page = 0.obs;
 
 
 }

@@ -33,7 +33,6 @@ class _HomepageState extends State<Homepage> {
   Utils utils = Utils();
   final HomeController homecontroller = Get.find<HomeController>();
   String profile = "";
-  int _page = 0;
   @override
   void initState() {
     super.initState();
@@ -41,6 +40,7 @@ class _HomepageState extends State<Homepage> {
   }
   Future<void> initialize() async {
     profile = await homecontroller.prefs.getString(AppStrings.key_profile_image);
+    homecontroller.page.value=Get.arguments["page"] !=null && Get.arguments["page"]!= "null" && Get.arguments["page"] != ""?Get.arguments["page"]:0;
     setState(() {});
 
   }
@@ -94,86 +94,88 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: showExitPopup,
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        extendBody: true,
-        bottomNavigationBar: CurvedNavigationBar(
-          index: _page,
-          buttonBackgroundColor: AppColors.primaryColorDark,
-          backgroundColor: Colors.transparent,
-          color: AppColors.primaryColorDark,
-          items: [
-            CurvedNavigationBarItem(
-                child: Image.asset(
-                  height: 25,
-                  width: 25,
-                  ImagePath.article,
-                  color: Colors.white,
-                ),
-                label: 'Articles',
-                labelStyle: TextStyle(
+      child: Obx(()=>
+         Scaffold(
+          backgroundColor: AppColors.white,
+          extendBody: true,
+          bottomNavigationBar: CurvedNavigationBar(
+            index: homecontroller.page.value,
+            buttonBackgroundColor: AppColors.primaryColorDark,
+            backgroundColor: Colors.transparent,
+            color: AppColors.primaryColorDark,
+            items: [
+              CurvedNavigationBarItem(
+                  child: Image.asset(
+                    height: 25,
+                    width: 25,
+                    ImagePath.article,
                     color: Colors.white,
-                    fontSize: 12,
-                    overflow: TextOverflow.ellipsis
-                )),
-            CurvedNavigationBarItem(
-                child: Image.asset(
-                  ImagePath.doctor,
-                  height: 25,
-                  width: 25,
-                  color: Colors.white,
-                ),
-                label: 'Doctors',
-                labelStyle: TextStyle(
+                  ),
+                  label: 'Articles',
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      overflow: TextOverflow.ellipsis
+                  )),
+              CurvedNavigationBarItem(
+                  child: Image.asset(
+                    ImagePath.doctor,
+                    height: 25,
+                    width: 25,
                     color: Colors.white,
-                    fontSize: 12,
-                    overflow: TextOverflow.ellipsis
-                )),
-            CurvedNavigationBarItem(
-                child: Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.white,
-                  size: 25,
-                ),
-                label: 'Add',
-                labelStyle: TextStyle(
+                  ),
+                  label: 'Doctors',
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      overflow: TextOverflow.ellipsis
+                  )),
+              CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.add_circle_outline,
                     color: Colors.white,
-                    overflow: TextOverflow.ellipsis
-                )),
-            CurvedNavigationBarItem(
-                child: Image.asset(
-                  ImagePath.rejected,
-                  color: Colors.white,
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Rejected Drs',
-                labelStyle: TextStyle(
+                    size: 25,
+                  ),
+                  label: 'Add',
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      overflow: TextOverflow.ellipsis
+                  )),
+              CurvedNavigationBarItem(
+                  child: Image.asset(
+                    ImagePath.rejected,
                     color: Colors.white,
-                    fontSize: 12,
-                    overflow: TextOverflow.ellipsis
-                )),
-            CurvedNavigationBarItem(
-                child: Image.asset(
-                  ImagePath.settings,
-                  color: Colors.white,
-                  height: 22,
-                  width: 22,
-                ),
-                label: 'Settings',
-                labelStyle: TextStyle(
+                    height: 25,
+                    width: 25,
+                  ),
+                  label: 'Rejected Drs',
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      overflow: TextOverflow.ellipsis
+                  )),
+              CurvedNavigationBarItem(
+                  child: Image.asset(
+                    ImagePath.settings,
                     color: Colors.white,
-                    fontSize: 12,
-                    overflow: TextOverflow.ellipsis
-                )),
-          ],
-          onTap: (index) {
-            setState(() {
-              _page = index;
-            });
-          },
+                    height: 22,
+                    width: 22,
+                  ),
+                  label: 'Settings',
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      overflow: TextOverflow.ellipsis
+                  )),
+            ],
+            onTap: (index) {
+              setState(() {
+                homecontroller.page.value = index;
+              });
+            },
+          ),
+          body: pageList.elementAt(homecontroller.page.value),
         ),
-        body: pageList.elementAt(_page),
       ),
     );
   }

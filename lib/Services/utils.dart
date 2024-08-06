@@ -296,8 +296,7 @@ class Utils {
     return true;
     }
     } else {
-      showAlert(AlertType.warning, hintText: "Please Enable Network Provided Time", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);
-      ;
+      showAlert(AlertType.warning, hintText: "Please Enable Network Provided Time", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
     }
   }
 }

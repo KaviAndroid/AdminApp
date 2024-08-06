@@ -35,7 +35,7 @@ class UIHelper {
       prefixIcon: prefixwidget,
       suffixIcon: suffixWidget,
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.grey9, fontSize: 12),
+      hintStyle: TextStyle(color: AppColors.grey9, fontSize: 12,),
       label: ResponsiveFonts(
         text: hintText,
         color: AppColors.grey9,
@@ -46,7 +46,7 @@ class UIHelper {
       fillColor: AppColors.white,
       filled: true,
       contentPadding: const EdgeInsets.symmetric(
-        vertical: 0,
+        vertical: 8,
         horizontal: 15,
       ),
       enabledBorder: UIHelper.getInputBorder(0, borderColor: AppColors.grey1, radius: 10),

@@ -24,6 +24,8 @@ class AppStrings {
   static const String key_profile_image = "profile_image";
   static const String key_image_available = "image_available";
   static const String key_image = "image";
+  static const String key_description = "description";
+  static const String key_image_list = "image_list";
 
 
   static const String service_key_login = "login";

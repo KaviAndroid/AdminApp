@@ -152,7 +152,7 @@ class ViewImageState extends State<ViewImage> {
 }
 */
 
-showStageImage(ViewImageController controller, int pos) {
+showStageImage(imageList, int pos) {
   //Caurosal
   int currentIndex = pos;
   PageController pageScrollController = PageController(initialPage: pos);
@@ -197,7 +197,7 @@ showStageImage(ViewImageController controller, int pos) {
                   );
                 },
                 controller: pageScrollController,
-                itemCount: controller.imageList.length,
+                itemCount: imageList.length,
                 itemBuilder: (context, index) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(15),
@@ -209,7 +209,7 @@ showStageImage(ViewImageController controller, int pos) {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                              image: FileImage(File(controller.imageList[index][AppStrings.key_image])),
+                              image: FileImage(File(imageList[index][AppStrings.key_image])),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -221,7 +221,7 @@ showStageImage(ViewImageController controller, int pos) {
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 color: Colors.black.withOpacity(0.25),
-                                child: ResponsiveFonts(text: "${index + 1} / ${controller.imageList.length}", size: 13, color: AppColors.white, decoration: TextDecoration.none),
+                                child: ResponsiveFonts(text: "${index + 1} / ${imageList.length}", size: 13, color: AppColors.white, decoration: TextDecoration.none),
                               ),
                               borderRadius: BorderRadius.circular(10),
                             )),
@@ -243,7 +243,7 @@ showStageImage(ViewImageController controller, int pos) {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(
-                      controller.imageList.length,
+                      imageList.length,
                       (index) {
                         bool isSelected = currentIndex == index;
                         return GestureDetector(

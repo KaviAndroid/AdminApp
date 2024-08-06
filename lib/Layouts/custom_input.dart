@@ -73,6 +73,8 @@ class _CustomInputState extends State<CustomInput> {
           child: FormBuilderTextField(
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.black),
             name: widget.fieldname,
+            minLines: widget.fieldname=="description"?5:1,
+            maxLines: null,
             maxLength: widget.fieldname=="mobile"?10:null,
             initialValue: widget.initvalue ?? "",
             obscureText: widget.showpassword,
