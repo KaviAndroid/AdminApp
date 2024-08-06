@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import '../Layouts/custom_alert.dart';
 import '../Resources/strings.dart';
 
 import '../Services/api_services.dart';

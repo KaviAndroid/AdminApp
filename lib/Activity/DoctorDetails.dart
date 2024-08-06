@@ -15,12 +15,14 @@ class DoctorDetails extends StatefulWidget {
 
 class _DoctorDetailsState extends State<DoctorDetails> {
   String tag="";
+  String flag="";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     tag=Get.arguments["tag"];
+    flag=Get.arguments["flag"];
   }
   @override
   Widget build(BuildContext context) {
@@ -73,17 +75,20 @@ class _DoctorDetailsState extends State<DoctorDetails> {
 
           ],),),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            UIHelper().actionButton(AppColors.red, "Reject".tr, radius: 25, onPressed: () {
-              // controller.login(context);
-            }, reducewidth: 3),
-            UIHelper().actionButton(AppColors.green, "Approve".tr, radius: 25, onPressed: () {
-              // controller.login(context);
-            }, reducewidth: 3),
+        Visibility(
+          visible: flag=="pending",
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              UIHelper().actionButton(AppColors.red, "Reject".tr, radius: 25, onPressed: () {
+                // controller.login(context);
+              }, reducewidth: 3),
+              UIHelper().actionButton(AppColors.green, "Approve".tr, radius: 25, onPressed: () {
+                // controller.login(context);
+              }, reducewidth: 3),
 
-          ],
+            ],
+          ),
         ),
       ],
               ),

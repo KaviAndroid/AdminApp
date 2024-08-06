@@ -1,4 +1,5 @@
 import 'package:admin_app/Activity/DoctorDetails.dart';
+import 'package:admin_app/Activity/view_image.dart';
 import 'package:get/get.dart';
 import '../Activity/signin.dart';
 import '../Activity/splash.dart';

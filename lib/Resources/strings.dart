@@ -22,6 +22,8 @@ class AppStrings {
   static const String key_mobile_otp = "mobile_otp";
   static const String key_cluster_sub_id = "primary_id";
   static const String key_profile_image = "profile_image";
+  static const String key_image_available = "image_available";
+  static const String key_image = "image";
 
 
   static const String service_key_login = "login";

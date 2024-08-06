@@ -1,6 +1,7 @@
 import 'package:admin_app/Controllers/authendication_controller.dart';
 import 'package:admin_app/Controllers/home_controller.dart';
 
+import '../Controllers/view_image_controller.dart';
 import '../Services/preference_services.dart';
 import 'package:get/get.dart';
 
@@ -14,5 +15,6 @@ class InitialBinding implements Bindings {
 
     Get.put(AuthendicationController());
     Get.put(HomeController());
+    Get.put(ViewImageController());
   }
 }

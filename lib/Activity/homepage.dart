@@ -98,7 +98,7 @@ class _HomepageState extends State<Homepage> {
         backgroundColor: AppColors.white,
         extendBody: true,
         bottomNavigationBar: CurvedNavigationBar(
-          index: 2,
+          index: _page,
           buttonBackgroundColor: AppColors.primaryColorDark,
           backgroundColor: Colors.transparent,
           color: AppColors.primaryColorDark,

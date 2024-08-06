@@ -14,4 +14,5 @@ class ImagePath {
   static const String doctor = "assets/images/doctor.png";
   static const String rejected = "assets/images/rejected.png";
   static const String settings = "assets/images/settings.png";
+  static const String denied = "assets/images/denied.png";
 }

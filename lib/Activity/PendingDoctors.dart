@@ -43,46 +43,8 @@ class _PendingDoctorsState extends State<PendingDoctors> {
             child: Column(
               children: [
                 UIHelper.verticalSpaceSmall,
-                Container(
-                    margin: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AnimatedContainer(
-                          duration: Duration(milliseconds: 400),
-                          padding: EdgeInsets.all(5),
-                          decoration: UIHelper.circledecorationWithColor(AppColors.secondaryColor, AppColors.primaryColor),
-                          height: Get.width / 5 ,
-                          width: Get.width / 5 ,
-                          margin: EdgeInsets.all(3),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(ImagePath.admin, fit: BoxFit.cover),
-                          ),
-                        ),
-                        UIHelper.horizontalSpaceTiny,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              UIHelper.verticalSpaceSmall,
-                              ResponsiveFonts(text: 'Hi Admin!', size: 20,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
-                              UIHelper.verticalSpaceSmall,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(ImagePath.location, fit: BoxFit.cover,height: 20,width: 20,),
-                                  UIHelper.horizontalSpaceTiny,
-                                  Expanded(child: ResponsiveFonts(text: 'K. AIYAPPAN, (SECRETARY). 21, Sabari Street, Nesapakkam,. K.K. Nagar West, Chennai - 600 078.', size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.normal,)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )),
-                UIHelper.verticalSpaceMedium,
+                ResponsiveFonts(text: 'Pending Doctors', size: 14,color: AppColors.primaryColorDark,fontWeight: FontWeight.bold,),
+                UIHelper.verticalSpaceSmall,
                 Container(decoration: UIHelper.roundedBorderWithColor(10, AppColors.white,borderWidth: 2,borderColor: AppColors.primaryColor,),
                   padding: EdgeInsets.all(20),
                   child: Row(children: [
@@ -95,7 +57,7 @@ class _PendingDoctorsState extends State<PendingDoctors> {
                           ResponsiveFonts(text: 'Lets start doctors profile validation.', size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.normal,)
                         ],),
                     ),
-                    Image.asset(ImagePath.select_profile, fit: BoxFit.cover,width: Get.width/3,height: Get.width/3,),
+                    Image.asset(ImagePath.select_profile, fit: BoxFit.cover,width: Get.width/4,height: Get.width/4,),
                   ],),),
                 UIHelper.verticalSpaceSmall,
                 Container(
@@ -137,7 +99,7 @@ class _PendingDoctorsState extends State<PendingDoctors> {
                           color:AppColors.primaryLiteColor_2 ,
                           child: InkWell(
                             onTap: (){
-                              Get.toNamed(Routes.doctordetails,arguments: {"tag":tag});
+                              Get.toNamed(Routes.doctordetails,arguments: {"tag":tag,"flag":"pending"});
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
