@@ -190,7 +190,7 @@ class _ArticlesState extends State<Articles> {
                                   child: ExpandableText(/*art*/currentItem[AppStrings.key_description],trimLines: 5,txtcolor: AppColors.txtclr,)
                                 ),UIHelper.verticalSpaceMedium,
                               ],),
-                              Positioned(
+                              /*Positioned(
                                   top: 10,
                                   left: 10,
                                   child: buildBlur(
@@ -200,7 +200,7 @@ class _ArticlesState extends State<Articles> {
                                       child: ResponsiveFonts(text: "${1} / ${currentItem[AppStrings.key_image_list].length}",fontWeight: FontWeight.bold, size: 13, color: AppColors.white, decoration: TextDecoration.none),
                                     ),
                                     borderRadius: BorderRadius.circular(10),
-                                  )),
+                                  )),*/
                               Positioned(
                                 right: 0,
                                   child: Column(
@@ -209,7 +209,7 @@ class _ArticlesState extends State<Articles> {
                                   Container(decoration: UIHelper.roundedBorderWithColor(10, AppColors.primaryLiteColor),
                                   padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                                   margin: EdgeInsets.all(8),
-                                    child: ResponsiveFonts(text: "$ss 350", size: 14,color: AppColors.white,fontWeight: FontWeight.bold,),),
+                                    child: ResponsiveFonts(text:currentItem[AppStrings.key_license_type]=="free"? "Free":("$ss ${currentItem[AppStrings.key_amount].toString()}"), size: 14,color: AppColors.white,fontWeight: FontWeight.bold,),),
                                   Container(
                                     margin: EdgeInsets.only(right: 8),
                                     padding: EdgeInsets.all(5),
@@ -218,6 +218,19 @@ class _ArticlesState extends State<Articles> {
 
                                 ],
                               )),
+                              Positioned(
+                                right: 0,
+                                  bottom: 0,
+                                  child: InkWell(
+                                    onTap: (){
+                                       utils.showAlert(AlertType.warning, hintText: "Are you sure to delete!", buttons: [UIHelper().actionButton(reducewidth: 3,btnheight: 35, AppColors.red, 'No', onPressed: () => Get.back()),
+                                         UIHelper().actionButton(reducewidth: 3,btnheight: 35, AppColors.green, 'Yes', onPressed: () {
+                                           viewImageController.articleList.removeAt(index);
+                                           Get.back();
+                                         })]);;
+
+                                    },
+                                      child: Icon(Icons.delete,size: 25,color: AppColors.red,))),
                             ],
                           ),
 

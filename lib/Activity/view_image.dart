@@ -214,7 +214,7 @@ showStageImage(imageList, int pos) {
                             ),
                           ),
                         ),
-                        Positioned(
+                       /* Positioned(
                             top: 15,
                             left: 15,
                             child: buildBlur(
@@ -224,7 +224,7 @@ showStageImage(imageList, int pos) {
                                 child: ResponsiveFonts(text: "${index + 1} / ${imageList.length}", size: 13, color: AppColors.white, decoration: TextDecoration.none),
                               ),
                               borderRadius: BorderRadius.circular(10),
-                            )),
+                            )),*/
                       ],
                     ),
                   );

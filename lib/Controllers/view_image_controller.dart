@@ -30,6 +30,7 @@ class ViewImageController extends GetxController {
     if (file == null) {
       utils.showSnackBar("User Cancelled Opeartion", type: AlertType.warning);
     } else {
+      imageList.clear();
       imageList.add({AppStrings.key_image:file.path});
     }
   }

@@ -75,30 +75,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
                             viewImageController.imageList.isNotEmpty?showStageImage(viewImageController.imageList,0):null;
                           },
                             child:
-                          /*GestureDetector(
-                            onPanUpdate: (DragUpdateDetails details){
-                              if(details.delta.dx>0){
-                                print('right swipe');
-                                //right scroll
-                                //increment counter
-                                setState(() {
-                                  imgIndex=(imgIndex-1)>=0?(imgIndex-1):0;
-                                  print('imgIndex'+imgIndex.toString());
-
-                                });
-                              }
-                              else if(details.delta.dx<0){
-                                print('left swipe');
-                                //left scroll
-                                //decrement counter
-                                setState(() {
-                                  imgIndex=(imgIndex+1)<=(viewImageController.imageList.length-1)?(imgIndex+1):(viewImageController.imageList.length-1);
-
-                                  print('imgIndex>>'+imgIndex.toString());
-                                });
-                              }
-                            },
-                            child:*/ Container(
+                          Container(
                               width: Get.width,
                               height: Get.width/1.5,
                               decoration: BoxDecoration(
@@ -114,7 +91,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
                           ),
 
                         ],),
-                        Positioned(
+                       /* Positioned(
                             top: 10,
                             right: 10,
                             child: buildBlur(
@@ -124,7 +101,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
                                 child: ResponsiveFonts(text: "${viewImageController.imageList.isNotEmpty?imgIndex+1:0} / ${viewImageController.imageList.length}",fontWeight: FontWeight.bold, size: 13, color: AppColors.white, decoration: TextDecoration.none),
                               ),
                               borderRadius: BorderRadius.circular(10),
-                            )),
+                            )),*/
                       ],
                     ),
 
@@ -220,6 +197,8 @@ class _AddNewArticleState extends State<AddNewArticle> {
                             imgList.addAll(viewImageController.imageList);
                             Map map={
                               AppStrings.key_description:viewImageController.description.trim(),
+                              AppStrings.key_amount:viewImageController.amount.trim(),
+                              AppStrings.key_license_type:_radioVal,
                               AppStrings.key_image_list:imgList
                             };
                             viewImageController.articleList.add(map);

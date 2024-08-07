@@ -25,6 +25,9 @@ class AppStrings {
   static const String key_image_available = "image_available";
   static const String key_image = "image";
   static const String key_description = "description";
+  static const String key_amount = "amount";
+  static const String key_license_type = "license_type";
+
   static const String key_image_list = "image_list";
 
 
