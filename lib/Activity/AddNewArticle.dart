@@ -19,7 +19,9 @@ import '../Resources/image_path.dart';
 import '../Resources/strings.dart';
 
 class AddNewArticle extends StatefulWidget {
-  const AddNewArticle({super.key});
+  final flag;
+  final arguments;
+  AddNewArticle({super.key,this.flag,this.arguments});
 
   @override
   State<AddNewArticle> createState() => _AddNewArticleState();
@@ -30,7 +32,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
   final ViewImageController viewImageController = Get.find<ViewImageController>();
   final HomeController homecontroller = Get.find<HomeController>();
   int _radioSelected = 0;
-  String _radioVal="";
+  String flag="";
   int imgIndex=0;
   @override
   void initState() {
@@ -38,9 +40,22 @@ class _AddNewArticleState extends State<AddNewArticle> {
     initialize();
   }
   Future<void> initialize() async {
-    viewImageController.description="";
-    viewImageController.amount="";
     viewImageController.imageList=[];
+    flag=widget.flag;
+    print("flag"+flag);
+    print("widget.arguments"+widget.arguments.toString());
+    if(flag=="edit"){
+      viewImageController.imageList.add({AppStrings.key_image:widget.arguments[AppStrings.key_file]});
+      // viewImageController.imageList.addAll(widget.arguments[AppStrings.key_image_list]);
+      viewImageController.content=widget.arguments[AppStrings.key_content]??"";
+      viewImageController.title=widget.arguments[AppStrings.key_title]??"";
+      viewImageController.amount=widget.arguments[AppStrings.key_amount]??"";
+      _radioSelected=widget.arguments[AppStrings.key_is_premium]?2:1;
+    }else{
+      viewImageController.content="";
+      viewImageController.title="";
+      viewImageController.amount="";
+    }
     setState(() {});
 
   }
@@ -62,7 +77,18 @@ class _AddNewArticleState extends State<AddNewArticle> {
                 Container(
                   margin: EdgeInsets.only(left: 10),
                   alignment: Alignment.centerLeft,
-                    child: ResponsiveFonts(text: 'Create New Article', size: 18,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
+                    child: Row(
+                      children: [
+                        Visibility(
+                          visible: flag=="edit",
+                          child: InkWell(onTap: (){Get.back();},
+                          child: Icon(Icons.arrow_back,color: AppColors.primaryColorDark,),),
+                        ),
+                        Visibility(
+                            visible: flag=="edit",child: UIHelper.horizontalSpaceSmall),
+                        ResponsiveFonts(text: 'Create New Article', size: 18,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
+                      ],
+                    )),
                   UIHelper.verticalSpaceSmall,
                   Container(
                     width: Get.width,
@@ -122,14 +148,30 @@ class _AddNewArticleState extends State<AddNewArticle> {
                     child: Icon(Icons.camera,color: AppColors.white,size: 30,),),
                   ),),
                   UIHelper.verticalSpaceMedium,
-                  Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Enter Description", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
+                  Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Enter Title", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
                   UIHelper.verticalSpaceSmall,
                   CustomInput(
+                    initvalue: viewImageController.title,
                     onEnter: (val) {
-                      viewImageController.description=val.toString();
+                      viewImageController.title=val.toString();
                     },
-                    hintText: "Description",
-                    fieldname: "description",
+                    hintText: "Title",
+                    fieldname: "title",
+                    fieldType: FieldType.text,
+                    validating: (value) {
+                      return null;
+                    },
+                  ),
+                  UIHelper.verticalSpaceMedium,
+                  Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Enter Content", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
+                  UIHelper.verticalSpaceSmall,
+                  CustomInput(
+                    initvalue: viewImageController.content,
+                    onEnter: (val) {
+                      viewImageController.content=val.toString();
+                    },
+                    hintText: "Content",
+                    fieldname: "content",
                     fieldType: FieldType.text,
                     validating: (value) {
                       return null;
@@ -148,7 +190,6 @@ class _AddNewArticleState extends State<AddNewArticle> {
                           setState(() {
                             viewImageController.amount="";
                             _radioSelected = value!;
-                            _radioVal = 'free';
                           });
                         },
                       ),
@@ -161,7 +202,6 @@ class _AddNewArticleState extends State<AddNewArticle> {
                           setState(() {
                             viewImageController.amount="";
                             _radioSelected = value!;
-                            _radioVal = 'premium';
                           });
                         },
                       ),
@@ -169,12 +209,13 @@ class _AddNewArticleState extends State<AddNewArticle> {
                     ],
                   ),
                   Visibility(
-                    visible: _radioVal=="premium",
+                    visible: _radioSelected==2,
                       child: Column(children: [
                     UIHelper.verticalSpaceSmall,
                     Align(alignment: Alignment.centerLeft,child: ResponsiveFonts(text: "Enter Amount", size: 14,color: AppColors.primaryColor,fontWeight: FontWeight.bold,)),
                     UIHelper.verticalSpaceSmall,
                     CustomInput(
+                      initvalue: viewImageController.amount,
                       onEnter: (val) {
                         viewImageController.amount=val.toString();
                       },
@@ -188,27 +229,45 @@ class _AddNewArticleState extends State<AddNewArticle> {
                   ],)),
 
                   UIHelper.verticalSpaceMedium,
-                  UIHelper().actionButton(AppColors.primaryColor, "Submit".tr, radius: 25, onPressed: () async {
+                  UIHelper().actionButton(AppColors.primaryColor, flag=="edit"?"Update":"Submit".tr, radius: 25, onPressed: () async {
                     if(viewImageController.imageList.isNotEmpty){
-                      if(viewImageController.description.trim().isNotEmpty){
-                        if(_radioVal.isNotEmpty){
-                          if(_radioVal=="free" || (_radioVal=="premium" && viewImageController.amount.trim() !="")){
+                      if(viewImageController.title.trim().isNotEmpty){
+                      if(viewImageController.content.trim().isNotEmpty){
+                        if(_radioSelected!=0){
+                          if(_radioSelected==1 || (_radioSelected==2 && viewImageController.amount.trim() !="")){
                             List imgList=[];
                             imgList.addAll(viewImageController.imageList);
-                            Map map={
-                              AppStrings.key_description:viewImageController.description.trim(),
+                            Map<String, dynamic> map={
+                              AppStrings.key_service_id:AppStrings.service_key_add_article,
+                              if(flag=="edit")...{AppStrings.key_art_id:viewImageController.articleList.length+1},
+                              AppStrings.key_content:viewImageController.content.trim(),
+                              AppStrings.key_title:viewImageController.title.trim(),
                               AppStrings.key_amount:viewImageController.amount.trim(),
-                              AppStrings.key_license_type:_radioVal,
-                              AppStrings.key_image_list:imgList
+                              AppStrings.key_is_premium:_radioSelected==1?false:true,
+                              AppStrings.key_file:imgList[0][AppStrings.key_image]
                             };
-                            viewImageController.articleList.add(map);
+                            if(flag=="edit"){
+                              final index = viewImageController.articleList.indexWhere((element) => element[AppStrings.key_art_id] == widget.arguments[AppStrings.key_art_id]);
+                              if (index != -1) {
+                               await viewImageController.addArticleApi(map);
+                                // viewImageController.articleList[index] = map; // Update the element at the found index
+                              }
+                            }else{
+                              await viewImageController.addArticleApi(map);
+                              // viewImageController.articleList.add(map);
+                            }
                             print("viewImageController.articleList"+viewImageController.articleList.value.toString());
-                            await utils.showAlert(AlertType.success, hintText: "Article Posted Successfully!", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
-                            viewImageController.description="";
+/*                            await utils.showAlert(AlertType.success, hintText: flag=="edit"?"Article Updated Successfully!":"Article Posted Successfully!", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: (){
+                              Get.back();
+                              if(flag=="edit"){
+                                Get.back();
+                              }
+                            } )]);*/;
+                            viewImageController.content="";
+                            viewImageController.title="";
                             viewImageController.imageList.clear();
                             viewImageController.amount="";
                             _radioSelected = 0;
-                            _radioVal = "";
                             setState(() {homecontroller.page.value=0;});
                           }else{
                             utils.showAlert(AlertType.warning, hintText: "Please Enter Amount", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
@@ -217,7 +276,10 @@ class _AddNewArticleState extends State<AddNewArticle> {
                           utils.showAlert(AlertType.warning, hintText: "Please Select License Mode", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
                         }
                       }else{
-                        utils.showAlert(AlertType.warning, hintText: "Please Enter Description", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
+                        utils.showAlert(AlertType.warning, hintText: "Please Enter Content", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
+                      }
+                      }else{
+                        utils.showAlert(AlertType.warning, hintText: "Please Enter Title", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;
                       }
                     }else{
                       utils.showAlert(AlertType.warning, hintText: "Add Article Photo", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: () => Get.back())]);;

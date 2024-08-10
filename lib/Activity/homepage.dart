@@ -40,7 +40,7 @@ class _HomepageState extends State<Homepage> {
   }
   Future<void> initialize() async {
     profile = await homecontroller.prefs.getString(AppStrings.key_profile_image);
-    homecontroller.page.value=Get.arguments["page"] !=null && Get.arguments["page"]!= "null" && Get.arguments["page"] != ""?Get.arguments["page"]:0;
+    homecontroller.page.value=0;
     setState(() {});
 
   }
@@ -85,7 +85,7 @@ class _HomepageState extends State<Homepage> {
   List<Widget> pageList = [
     Articles(),
     PendingDoctors(),
-    AddNewArticle(),
+    AddNewArticle(flag: "new",),
     RejectedDoctors(),
     Settings(),
   ];

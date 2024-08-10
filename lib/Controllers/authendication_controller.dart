@@ -40,7 +40,7 @@ class AuthendicationController extends GetxController {
     var decodedData;
     try {
       utils.showProgress();
-      decodedData = await ApiServices().openServiceFunction("RESEND OTP", request);
+      decodedData = await ApiServices().MainServiceFunction("RESEND OTP", request,"");
     } catch (e) {
       Utils().showSnackBar("Unable to fetch response");
     } finally {
@@ -64,7 +64,7 @@ class AuthendicationController extends GetxController {
     var decodedData;
     try {
       utils.showProgress();
-      decodedData = await ApiServices().openServiceFunction("UPDATE PASSWORD", request);
+      decodedData = await ApiServices().MainServiceFunction("UPDATE PASSWORD", request,"");
     } catch (e) {
       Utils().showSnackBar("Unable to fetch response");
     } finally {
@@ -123,7 +123,7 @@ class AuthendicationController extends GetxController {
       var decodedData;
       try {
         utils.showProgress();
-        decodedData = await ApiServices().loginServiceFunction("login", request);
+        decodedData = await ApiServices().MainServiceFunction("login", request, "");
       } catch (e) {
         Utils().showSnackBar("Unable to fetch response");
       } finally {

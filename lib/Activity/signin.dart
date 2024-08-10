@@ -47,8 +47,17 @@ class SigninView extends StatelessWidget {
                   ),
                   UIHelper.verticalSpaceLarge,
                   UIHelper().actionButton(AppColors.primaryColor, "Get OTP".tr, radius: 25, onPressed: () {
-                    Get.toNamed(Routes.home);
-                    // controller.login(context);
+                    // Get.toNamed(Routes.home);
+                    showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      elevation: 3,
+                      showDragHandle: true,
+                      enableDrag: true,
+                      isScrollControlled: true,
+                      builder: (builder) => bottomSheet(context, controller),
+                    );
+
                   }, reducewidth: 1.35),
                   UIHelper.verticalSpaceMedium,
                 ],
@@ -61,13 +70,14 @@ class SigninView extends StatelessWidget {
   }
 
   Widget bottomSheet(context, AuthendicationController controller) {
-    return Obx(
-      () => DraggableScrollableSheet(
+    return DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.5,
         builder: (context, scrollController) => SingleChildScrollView(
           controller: scrollController,
           child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             margin: const EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
@@ -128,7 +138,7 @@ class SigninView extends StatelessWidget {
                 UIHelper().actionButton(AppColors.secondaryColor, "Submit", radius: 15, onPressed: () {
                   if (controller.finalOTP.isNotEmpty && controller.finalOTP.length==6) {
                     Get.back();
-
+                    Get.toNamed(Routes.home);
                   } else {
                     controller.utils.showSnackBar("Pleas Enter Valid OTP");
                   }
@@ -137,7 +147,6 @@ class SigninView extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

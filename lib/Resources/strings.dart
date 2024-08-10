@@ -2,7 +2,7 @@ class AppStrings {
   static const String appname = "Admin";
 
   static const String key_enc_data = "enc_data";
-  static const String key_service_id = 'service_id';
+  static const String key_service_id = 'service';
   static const String key_user_login_key = "user_login_key";
   static const String key_app_code = "appcode";
   static const String key_name = "name";
@@ -24,8 +24,12 @@ class AppStrings {
   static const String key_profile_image = "profile_image";
   static const String key_image_available = "image_available";
   static const String key_image = "image";
-  static const String key_description = "description";
+  static const String key_art_id = "art_id";
+  static const String key_title = "title";
+  static const String key_content = "content";
   static const String key_amount = "amount";
+  static const String key_is_premium = "is_premium";
+  static const String key_file = "file";
   static const String key_license_type = "license_type";
 
   static const String key_image_list = "image_list";
@@ -34,5 +38,6 @@ class AppStrings {
   static const String service_key_login = "login";
   static const String service_key_resendOtp = "resendOtp";
   static const String service_key_verifyOtp = "verifyOtp";
-  
+  static const String service_key_add_article = "add_article";
+
 }

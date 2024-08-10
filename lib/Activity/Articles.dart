@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:admin_app/Activity/AddNewArticle.dart';
 import 'package:admin_app/Activity/view_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -187,7 +188,7 @@ class _ArticlesState extends State<Articles> {
                                 Container(
                                   padding: const EdgeInsets.all(10.0),
                                   alignment: Alignment.centerLeft,
-                                  child: ExpandableText(/*art*/currentItem[AppStrings.key_description],trimLines: 5,txtcolor: AppColors.txtclr,)
+                                  child: ExpandableText(/*art*/currentItem[AppStrings.key_content],trimLines: 5,txtcolor: AppColors.txtclr,)
                                 ),UIHelper.verticalSpaceMedium,
                               ],),
                               /*Positioned(
@@ -209,12 +210,17 @@ class _ArticlesState extends State<Articles> {
                                   Container(decoration: UIHelper.roundedBorderWithColor(10, AppColors.primaryLiteColor),
                                   padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                                   margin: EdgeInsets.all(8),
-                                    child: ResponsiveFonts(text:currentItem[AppStrings.key_license_type]=="free"? "Free":("$ss ${currentItem[AppStrings.key_amount].toString()}"), size: 14,color: AppColors.white,fontWeight: FontWeight.bold,),),
-                                  Container(
-                                    margin: EdgeInsets.only(right: 8),
-                                    padding: EdgeInsets.all(5),
-                                    decoration: UIHelper.circledecorationWithColor(AppColors.secondaryColor, AppColors.secondaryColor2),
-                                    child: Icon(Icons.edit,size: 25,color: AppColors.white,),)
+                                    child: ResponsiveFonts(text:currentItem[AppStrings.key_license_type]==1? "Free":("$ss ${currentItem[AppStrings.key_amount].toString()}"), size: 14,color: AppColors.white,fontWeight: FontWeight.bold,),),
+                                  InkWell(
+                                    onTap: (){
+                                      Get.to(() => AddNewArticle(flag: "edit",arguments:currentItem));
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8),
+                                      padding: EdgeInsets.all(5),
+                                      decoration: UIHelper.circledecorationWithColor(AppColors.secondaryColor, AppColors.secondaryColor2),
+                                      child: Icon(Icons.edit,size: 25,color: AppColors.white,),),
+                                  )
 
                                 ],
                               )),
