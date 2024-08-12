@@ -179,12 +179,17 @@ class _ArticlesState extends State<Articles> {
                                       ),
                                     ),
                                     context: context);*/
-                                  currentItem[AppStrings.key_image_list].isNotEmpty?showStageImage(currentItem[AppStrings.key_image_list],0):null;
+                                  currentItem[AppStrings.key_id].isEmpty?showStageImage(currentItem[AppStrings.key_image_list],0):null;
 
-                                },child:currentItem[AppStrings.key_image_list].isNotEmpty ?ClipRRect(
-                                    borderRadius: BorderRadius.circular(0),child: Image.file(width: Get.width,height: Get.width/2,fit: BoxFit.fill,File(currentItem[AppStrings.key_image_list][0][AppStrings.key_image]))):
+                                },child:currentItem[AppStrings.key_id].isEmpty ?ClipRRect(
+                                    borderRadius: BorderRadius.circular(0),child: Image.file(width: Get.width,height: Get.width/2,fit: BoxFit.fill,File(currentItem[AppStrings.key_id]))):
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(0),child: Image.asset(ImagePath.admin,height: Get.width/2,fit: BoxFit.fill,))),
+                                Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: ExpandableText(currentItem[AppStrings.key_title],trimLines: 2,txtcolor: "1",)
+                                ),
                                 Container(
                                   padding: const EdgeInsets.all(10.0),
                                   alignment: Alignment.centerLeft,

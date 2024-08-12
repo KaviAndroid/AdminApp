@@ -28,7 +28,7 @@ class ExpandableTextState extends State<ExpandableText> {
   Widget build(BuildContext context) {
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
     final colorClickableText = Colors.blue;
-    final widgetColor = widget.txtcolor=="1"?AppColors.white:AppColors.txtclr;
+    final widgetColor = widget.txtcolor=="1"?AppColors.primaryColorDark:AppColors.txtclr;
     TextSpan link = TextSpan(
         text: _readMore ? "... read more" : " read less",
         style: TextStyle(
@@ -73,7 +73,8 @@ class ExpandableTextState extends State<ExpandableText> {
             style: TextStyle(
               height: 1.3,
               color: widgetColor,
-                fontSize: 14
+                fontSize: 14,
+              fontWeight: widget.txtcolor=="1"? FontWeight.bold:FontWeight.normal
             ),
             children: <TextSpan>[link],
           );
@@ -82,7 +83,8 @@ class ExpandableTextState extends State<ExpandableText> {
             text: widget.text,
             style: TextStyle(
               color: widgetColor,
-              fontSize: 14
+              fontSize: 14,
+                fontWeight: widget.txtcolor=="1"? FontWeight.bold:FontWeight.normal
             ),
           );
         }

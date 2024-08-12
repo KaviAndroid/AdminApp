@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:admin_app/Activity/splash.dart';
+import 'package:admin_app/Controllers/view_image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   Utils utils = Utils();
   final HomeController homecontroller = Get.find<HomeController>();
+  final ViewImageController viewImageController = Get.find<ViewImageController>();
   String profile = "";
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _HomepageState extends State<Homepage> {
   Future<void> initialize() async {
     profile = await homecontroller.prefs.getString(AppStrings.key_profile_image);
     homecontroller.page.value=0;
+    await viewImageController.getArticleApi();
     setState(() {});
 
   }

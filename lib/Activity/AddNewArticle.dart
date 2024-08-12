@@ -32,7 +32,6 @@ class _AddNewArticleState extends State<AddNewArticle> {
   final ViewImageController viewImageController = Get.find<ViewImageController>();
   final HomeController homecontroller = Get.find<HomeController>();
   int _radioSelected = 0;
-  String flag="";
   int imgIndex=0;
   @override
   void initState() {
@@ -41,10 +40,10 @@ class _AddNewArticleState extends State<AddNewArticle> {
   }
   Future<void> initialize() async {
     viewImageController.imageList=[];
-    flag=widget.flag;
-    print("flag"+flag);
+    viewImageController.flag=widget.flag;
+    print("viewImageController.flag"+viewImageController.flag);
     print("widget.arguments"+widget.arguments.toString());
-    if(flag=="edit"){
+    if(viewImageController.flag=="edit"){
       viewImageController.imageList.add({AppStrings.key_image:widget.arguments[AppStrings.key_file]});
       // viewImageController.imageList.addAll(widget.arguments[AppStrings.key_image_list]);
       viewImageController.content=widget.arguments[AppStrings.key_content]??"";
@@ -80,12 +79,12 @@ class _AddNewArticleState extends State<AddNewArticle> {
                     child: Row(
                       children: [
                         Visibility(
-                          visible: flag=="edit",
+                          visible: viewImageController.flag=="edit",
                           child: InkWell(onTap: (){Get.back();},
                           child: Icon(Icons.arrow_back,color: AppColors.primaryColorDark,),),
                         ),
                         Visibility(
-                            visible: flag=="edit",child: UIHelper.horizontalSpaceSmall),
+                            visible: viewImageController.flag=="edit",child: UIHelper.horizontalSpaceSmall),
                         ResponsiveFonts(text: 'Create New Article', size: 18,color: AppColors.primaryColor,fontWeight: FontWeight.bold,),
                       ],
                     )),
@@ -229,7 +228,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
                   ],)),
 
                   UIHelper.verticalSpaceMedium,
-                  UIHelper().actionButton(AppColors.primaryColor, flag=="edit"?"Update":"Submit".tr, radius: 25, onPressed: () async {
+                  UIHelper().actionButton(AppColors.primaryColor, viewImageController.flag=="edit"?"Update":"Submit".tr, radius: 25, onPressed: () async {
                     if(viewImageController.imageList.isNotEmpty){
                       if(viewImageController.title.trim().isNotEmpty){
                       if(viewImageController.content.trim().isNotEmpty){
@@ -238,31 +237,24 @@ class _AddNewArticleState extends State<AddNewArticle> {
                             List imgList=[];
                             imgList.addAll(viewImageController.imageList);
                             Map<String, dynamic> map={
-                              AppStrings.key_service_id:AppStrings.service_key_add_article,
-                              if(flag=="edit")...{AppStrings.key_art_id:viewImageController.articleList.length+1},
+                              AppStrings.key_service_id:viewImageController.flag=="edit"?AppStrings.service_key_update_article:AppStrings.service_key_add_article,
+                              if(viewImageController.flag=="edit")...{AppStrings.key_article_id:viewImageController.articleList.length+1},
                               AppStrings.key_content:viewImageController.content.trim(),
                               AppStrings.key_title:viewImageController.title.trim(),
                               AppStrings.key_amount:viewImageController.amount.trim(),
                               AppStrings.key_is_premium:_radioSelected==1?false:true,
                               AppStrings.key_file:imgList[0][AppStrings.key_image]
                             };
-                            if(flag=="edit"){
-                              final index = viewImageController.articleList.indexWhere((element) => element[AppStrings.key_art_id] == widget.arguments[AppStrings.key_art_id]);
+                            await viewImageController.addArticleApi(map);
+                            /*if(viewImageController.flag=="edit"){
+                              final index = viewImageController.articleList.indexWhere((element) => element[AppStrings.key_article_id] == widget.arguments[AppStrings.key_article_id]);
                               if (index != -1) {
-                               await viewImageController.addArticleApi(map);
-                                // viewImageController.articleList[index] = map; // Update the element at the found index
+                                viewImageController.articleList[index] = map; // Update the element at the found index
                               }
                             }else{
-                              await viewImageController.addArticleApi(map);
-                              // viewImageController.articleList.add(map);
-                            }
+                              viewImageController.articleList.add(map);
+                            }*/
                             print("viewImageController.articleList"+viewImageController.articleList.value.toString());
-/*                            await utils.showAlert(AlertType.success, hintText: flag=="edit"?"Article Updated Successfully!":"Article Posted Successfully!", buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: (){
-                              Get.back();
-                              if(flag=="edit"){
-                                Get.back();
-                              }
-                            } )]);*/;
                             viewImageController.content="";
                             viewImageController.title="";
                             viewImageController.imageList.clear();

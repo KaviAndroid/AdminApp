@@ -4,6 +4,8 @@ import 'package:admin_app/Resources/strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../Layouts/custom_alert.dart';
+import '../Layouts/ui_helper.dart';
+import '../Resources/colors.dart';
 import '../Services/api_services.dart';
 import '../Services/preference_services.dart';
 import '../Services/utils.dart';
@@ -20,6 +22,7 @@ class ViewImageController extends GetxController {
   String content="";
   String title="";
   String amount="";
+  String flag="";
 
   void updateShimmer() {
     shimmerLoading.value = !shimmerLoading.value;
@@ -41,12 +44,41 @@ class ViewImageController extends GetxController {
     var decodedData;
     try {
       utils.showProgress();
-      decodedData = await ApiServices().MainServiceFunction("addArticleApi", map, "");
+      decodedData = await ApiServices().MainServiceFunction(flag=="edit"?"EditArticleApi":"AddArticleApi", map, "");
       if (decodedData != null && decodedData != "") {
-        var STATUS = decodedData[AppStrings.key_status];
-        var RESPONSE = decodedData[AppStrings.key_response];
-        dynamic KEY;
-        dynamic user_data;
+        var msg = decodedData[AppStrings.key_msg];
+        var message = decodedData[AppStrings.key_message];
+        if (msg != null && msg ==true) {
+          await getArticleApi();
+        await utils.showAlert(AlertType.success, hintText: message, buttons: [UIHelper().actionButton(btnheight: 35, AppColors.black, 'ok'.tr, onPressed: (){
+          Get.back();
+          if(flag=="edit"){
+            Get.back();
+          }
+        } )]);
+      }
+      }
+    } catch (e) {
+      Utils().showSnackBar("Unable to fetch response");
+    } finally {
+      utils.hideProgress();
+    }
+  }
+  Future<void> getArticleApi() async {
+    articleList.clear();
+    Map<String, dynamic> map={
+      AppStrings.key_service_id:AppStrings.service_key_get_articles,
+    };
+    var decodedData;
+    try {
+      utils.showProgress();
+      decodedData = await ApiServices().MainServiceFunction("GetArticleApi", map, "");
+      if (decodedData != null && decodedData != "") {
+        var msg = decodedData[AppStrings.key_msg];
+        var message = decodedData[AppStrings.key_message];
+        if (msg != null && msg ==true) {
+          articleList.assignAll(decodedData[AppStrings.key_json_data]);
+      }
       }
     } catch (e) {
       Utils().showSnackBar("Unable to fetch response");
