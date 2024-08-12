@@ -238,7 +238,7 @@ class _AddNewArticleState extends State<AddNewArticle> {
                             imgList.addAll(viewImageController.imageList);
                             Map<String, dynamic> map={
                               AppStrings.key_service_id:viewImageController.flag=="edit"?AppStrings.service_key_update_article:AppStrings.service_key_add_article,
-                              if(viewImageController.flag=="edit")...{AppStrings.key_article_id:viewImageController.articleList.length+1},
+                              if(viewImageController.flag=="edit")...{AppStrings.key_article_id:widget.arguments[AppStrings.key_id]},
                               AppStrings.key_content:viewImageController.content.trim(),
                               AppStrings.key_title:viewImageController.title.trim(),
                               AppStrings.key_amount:viewImageController.amount.trim(),
